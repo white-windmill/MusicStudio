@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelection.dart';
 import 'package:music_studio/mainPages/homePage/rotationPart.dart';
+import 'package:music_studio/mainPages/homePage/searchMessagePart.dart';
 
 class homePage extends StatelessWidget {
   @override
@@ -23,7 +25,7 @@ class homeAll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: new BoxDecoration(color: Color(0xFFF4EFEF)),
+        decoration: new BoxDecoration(color: Colors.white),
         // child: rotationChart(),
         child: CustomScrollView(
           scrollDirection: Axis.vertical,
@@ -34,11 +36,19 @@ class homeAll extends StatelessWidget {
                   Container(
                     child: Column(
                       children: <Widget>[
+                         SizedBox(
+                          height: 20,
+                        ),
+                        searchMessage(),
+                         SizedBox(
+                          height:20,
+                        ),
                         rotationChart(),
                         
                         SizedBox(
-                          height: 50,
-                        )
+                          height: 20,
+                        ),
+                        editorialSelection(),
                       ],
                     ),
                     alignment: Alignment.center,
