@@ -29,7 +29,7 @@ class _editorialSelectionState extends State<editorialSelection> {
             ])),
          Container(
            width: 500,
-           height: 400,
+           height: 250,
            child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,

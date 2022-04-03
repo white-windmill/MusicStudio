@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_studio/mainPages/homePage/editorialSelection.dart';
 import 'package:music_studio/mainPages/homePage/rotationPart.dart';
 import 'package:music_studio/mainPages/homePage/searchMessagePart.dart';
+import 'package:music_studio/mainPages/homePage/songList.dart';
 
 class homePage extends StatelessWidget {
   @override
@@ -49,6 +50,7 @@ class homeAll extends StatelessWidget {
                           height: 20,
                         ),
                         editorialSelection(),
+                        songList(),
                       ],
                     ),
                     alignment: Alignment.center,
