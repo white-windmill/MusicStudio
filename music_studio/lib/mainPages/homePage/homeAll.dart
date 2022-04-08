@@ -1,13 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelection.dart';
+import 'package:music_studio/mainPages/homePage/rotationPart.dart';
+import 'package:music_studio/mainPages/homePage/searchMessagePart.dart';
+import 'package:music_studio/mainPages/homePage/songList.dart';
 
-class homePage extends StatelessWidget{
+class homePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: Text("这是首页"),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        title: Text(
+          '首页',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
+      body: homeAll(),
     );
   }
-} 
+}
+
+class homeAll extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: new BoxDecoration(color: Colors.white),
+        // child: rotationChart(),
+        child: CustomScrollView(
+          scrollDirection: Axis.vertical,
+          slivers: <Widget>[
+            SliverList(
+              delegate: new SliverChildListDelegate(
+                [
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                         SizedBox(
+                          height: 20,
+                        ),
+                        searchMessage(),
+                         SizedBox(
+                          height:20,
+                        ),
+                        rotationChart(),
+                        
+                        SizedBox(
+                          height: 20,
+                        ),
+                        editorialSelection(),
+                        songList(),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}

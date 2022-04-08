@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:music_studio/bottom.dart';
-
+import 'package:music_studio/loginPage/sign_up.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'loginPage/sign_up.dart';
 import 'loginPage/login.dart';
 import 'mainPages/communityPage/communityAll.dart';
 import 'mainPages/homePage/homeAll.dart';
 import 'mainPages/minePage/mineAll.dart';
 void main() {
   runApp(Router());
+}
+
+class SpUtil {
+  static SharedPreferences prefs;
+  static Future<bool> getUserName() async {
+    prefs = await SharedPreferences.getInstance();
+    return true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -33,6 +43,7 @@ class Router extends StatelessWidget {
     '/community': (context) => communityPage(),
     '/mine': (context) =>minePage(),
     '/bottom':(context) => Bottom(),
+    '/sign_up':(context) => SignUp(),
   };
 
   @override
