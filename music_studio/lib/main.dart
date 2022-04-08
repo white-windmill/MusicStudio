@@ -9,6 +9,23 @@ void main() {
   runApp(Router());
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // home: MyHomePage(),
+      routes: {
+        // '/': (BuildContext context) => HomePage(),
+        // '/image': (context) => ImageSelector(),
+      },
+    );
+  }
+}
 class Router extends StatelessWidget {
   final routes = {
    '/login': (context) => Login(),
@@ -20,8 +37,7 @@ class Router extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-return MaterialApp(
+    return MaterialApp(
       initialRoute: '/login',
       //routes: routes,
       onGenerateRoute: (RouteSettings settings) {
@@ -41,6 +57,7 @@ return MaterialApp(
           }
         }
         return null;
-      },
-    );
-  }}
+      },);
+  }
+  }
+
