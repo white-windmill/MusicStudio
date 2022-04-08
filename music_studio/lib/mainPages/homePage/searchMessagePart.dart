@@ -2,25 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// class buildMessage extends StatelessWidget {
-//   //const buildMessage({Key? key}) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return IconButton(
-//         onPressed: () {
-//           Navigator.push(context, new MaterialPageRoute(builder: (
-//             BuildContext context,
-//           ) {
-//             return chatPage();
-//           }));
-//         },
-//         icon: Icon(
-//           MyIcons.message2Font,
-//           color: Color.fromARGB(255, 176, 210, 176),
-//         ));
-//   }
-// }
 
 class searchMessage extends StatelessWidget {
   Widget buildTextField() {
