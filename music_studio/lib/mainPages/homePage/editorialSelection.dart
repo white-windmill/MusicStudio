@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:music_studio/mainPages/homePage/songList.dart';
+import 'package:music_studio/mainPages/homePage/songListDetail.dart';
 
 class editorialSelection extends StatefulWidget {
   // editorialSelection({Key? key}) : super(key: key);
@@ -35,6 +37,12 @@ class _editorialSelectionState extends State<editorialSelection> {
             shrinkWrap: true,
             padding: const EdgeInsets.all(10.0),
             children: <Widget>[
+                 InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => songListDetail()));
+                },
+                child: recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),),
              recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
              recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
              recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
