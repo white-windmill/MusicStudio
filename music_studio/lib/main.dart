@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_studio/bottom.dart';
-
+import 'package:music_studio/loginPage/sign_up.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'loginPage/sign_up.dart';
 import 'loginPage/login.dart';
 import 'mainPages/communityPage/communityAll.dart';
 import 'mainPages/homePage/homeAll.dart';
@@ -9,6 +11,31 @@ void main() {
   runApp(Router());
 }
 
+class SpUtil {
+  static SharedPreferences prefs;
+  static Future<bool> getUserName() async {
+    prefs = await SharedPreferences.getInstance();
+    return true;
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // home: MyHomePage(),
+      routes: {
+        // '/': (BuildContext context) => HomePage(),
+        // '/image': (context) => ImageSelector(),
+      },
+    );
+  }
+}
 class Router extends StatelessWidget {
   final routes = {
    '/login': (context) => Login(),
@@ -16,12 +43,12 @@ class Router extends StatelessWidget {
     '/community': (context) => communityPage(),
     '/mine': (context) =>minePage(),
     '/bottom':(context) => Bottom(),
+    '/sign_up':(context) => SignUp(),
   };
 
   @override
   Widget build(BuildContext context) {
-
-return MaterialApp(
+    return MaterialApp(
       initialRoute: '/login',
       //routes: routes,
       onGenerateRoute: (RouteSettings settings) {
@@ -41,6 +68,7 @@ return MaterialApp(
           }
         }
         return null;
-      },
-    );
-  }}
+      },);
+  }
+  }
+
