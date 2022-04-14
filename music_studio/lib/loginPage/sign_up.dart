@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 var _phone = new TextEditingController();
 var _password = new TextEditingController();
 var _passwordsure = new TextEditingController();
-var _verification = new TextEditingController();
 var flag;
 
 class SignUp extends StatelessWidget {
@@ -32,7 +31,6 @@ class SignUp extends StatelessWidget {
                   _phone.clear();
                   _password.clear();
                   _passwordsure.clear();
-                  _verification.clear();
                   Navigator.pushNamed(context, '/login');
                 },
                 style: ButtonStyle(
@@ -137,47 +135,15 @@ class Layout extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(50, 0, 50, 20),
-            child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween, //将验证码和按钮分别和两侧对齐
-              children: <Widget>[
-                Container(
-                  height: 50.0,
-                  width: 125.0,
-                  child: TextField(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    keyboardType: TextInputType.number,
-                    controller: _verification,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide:
-                              BorderSide(width: 2, color: Colors.white)),
-                      labelText: '验证码',
-                      labelStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                    ),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                VerButton()
-              ],
-            ),
-          ),
-          Padding(
             padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
             child: InkWell(
               onTap: () {
                 var phonenumber = _phone.text;
                 var passwordnumber = _password.text;
                 var passwordsurenumber = _passwordsure.text;
-                var verification = _verification.text;
                 // print(flag);
                 if (passwordnumber == passwordsurenumber &&
                     passwordsurenumber.isNotEmpty &&
-                    verification == flag &&
                     passwordnumber.isNotEmpty &&
                     phonenumber.isNotEmpty) {
                   // _insert(phonenumber, passwordnumber, context);
@@ -187,10 +153,7 @@ class Layout extends StatelessWidget {
                   Fluttertoast.showToast(msg: "密码不一致!");
                 else if (passwordnumber.isEmpty)
                   Fluttertoast.showToast(msg: "请输入密码!");
-                else if (verification.isEmpty)
-                  Fluttertoast.showToast(msg: "请输入验证码!");
-                else if (verification != flag)
-                  Fluttertoast.showToast(msg: "验证码错误!");
+
               },
               child: Container(
                 width: double.infinity,

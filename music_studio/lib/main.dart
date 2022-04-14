@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_studio/bottom.dart';
+import 'package:music_studio/loginPage/forget_password.dart';
 import 'package:music_studio/loginPage/sign_up.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loginPage/sign_up.dart';
@@ -44,6 +45,7 @@ class Router extends StatelessWidget {
     '/mine': (context) =>minePage(),
     '/bottom':(context) => Bottom(),
     '/sign_up':(context) => SignUp(),
+    '/forget_password':(context) => ForgetPassword(),
   };
 
   @override
