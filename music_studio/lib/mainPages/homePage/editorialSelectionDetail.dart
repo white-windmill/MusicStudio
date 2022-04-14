@@ -67,6 +67,22 @@ class _songListDetailState extends State<songListDetail> {
                       serial: 111,
                       singer: "周杰伦",
                     ),
+                    songListItem(
+                      title: "以父之名",
+                      source: "叶惠美",
+                      serial: 111,
+                      singer: "周杰伦",
+                    ),songListItem(
+                      title: "你听得到",
+                      source: "叶惠美",
+                      serial: 111,
+                      singer: "周杰伦",
+                    ),songListItem(
+                      title: "东风破",
+                      source: "叶惠美",
+                      serial: 111,
+                      singer: "周杰伦",
+                    ),
                   ]))
             ],
           ),
@@ -97,7 +113,7 @@ class songListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(5, 5, 0, 2),
+                padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
                 child: Text(
                   title + "",
                   style: TextStyle(
@@ -110,13 +126,14 @@ class songListItem extends StatelessWidget {
                 child: Text(
                   singer + "·" + source + "",
                   style: TextStyle(
+                    color: Colors.grey,
                     fontSize: 12,
                   ),
                 ),
               ),
             ],
           )),
-          Text(serial.toString()),
+          Icon(Icons.more_vert),
         ],
       ),
     );

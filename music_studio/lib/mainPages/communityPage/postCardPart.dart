@@ -10,7 +10,13 @@ class postCardPage extends StatefulWidget {
 
 class _postCardPageState extends State<postCardPage> {
 
-  List<Widget> widgetList = [];
+  List<Widget> widgetList = [Image(
+          image: AssetImage("lib/assets/rotationChart/rotation1.jpg"), height: 70, width: 70),
+          Image(
+          image: AssetImage("lib/assets/rotationChart/rotation2.jpg"), height: 70, width: 70),
+          Image(
+          image: AssetImage("lib/assets/rotationChart/rotation3.jpg"), height: 70, width: 70),
+          ];
   @override
   Widget build(BuildContext context) {
     return  Padding(

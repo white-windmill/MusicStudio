@@ -25,7 +25,7 @@ class _songListState extends State<songList> {
                 fit: BoxFit.cover),
           ),
           SizedBox(
-            width: 20,
+            width: 10,
           ),
           Expanded(
             child: Column(
