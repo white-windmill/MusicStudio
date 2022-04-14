@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:music_studio/mainPages/homePage/songList.dart';
-import 'package:music_studio/mainPages/homePage/songListDetail.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
 
 class editorialSelection extends StatefulWidget {
   // editorialSelection({Key? key}) : super(key: key);

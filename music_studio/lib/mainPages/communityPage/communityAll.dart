@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/communityPage/postCardPart.dart';
 import 'package:music_studio/mainPages/homePage/searchMessagePart.dart';
 
 import 'addPostPart.dart';
@@ -9,10 +10,21 @@ class communityPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-       
+        appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        title: Text(
+          '社区',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
          body: Container(
-           decoration: new BoxDecoration(color: Colors.red),
-           child: Expanded(child: Text("zheshi shequ ") ,)
+           child:Column(
+             children: [
+               postCardPage(),
+             ],
+           )
           ,
          ),
         floatingActionButton: FloatingActionButton(
