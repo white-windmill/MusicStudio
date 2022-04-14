@@ -31,7 +31,7 @@ class _BottomState extends State<Bottom> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
           
-          BottomNavigationBarItem(icon: Icon(Icons.camera), label: "圈子"),
+          BottomNavigationBarItem(icon: Icon(Icons.camera), label: "社区"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
         ],
         currentIndex: _selectedIndex,
