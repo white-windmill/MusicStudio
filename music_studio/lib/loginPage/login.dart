@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -211,6 +213,7 @@ class LoginButton extends StatelessWidget {
         print('用户名：' + phoneNumberController.text);
         print('密码：' + passwordController.text);
         Navigator.pushNamed(context, '/bottom');
+        _login();
         // _login(username, password, context);
       },
       child: Container(
@@ -228,6 +231,13 @@ class LoginButton extends StatelessWidget {
           )),
     );
   }
+}
+
+_login() async {
+  var url = Uri.parse("https://d.musicapp.migu.cn/prod/file-service/file-down/4eedd78464c21ce789dea6928415b323/45449a2ca938fa15c66dcd018e332002/e35abab754d724ec0f6493773416295c");
+  var response = await http.get(url);
+  print(response.body);
+
 }
 
 // _login(String username, String password, BuildContext context) async {
