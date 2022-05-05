@@ -18,6 +18,8 @@ class NetworkUtil {
   NetworkUtil._();
 
 
+
+
   static ConnectivityResult networkState;
 
   var subscription;
