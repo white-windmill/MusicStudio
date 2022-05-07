@@ -1,15 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:music_studio/assets/myIcons.dart';
 
 class postCardPage extends StatefulWidget {
- // postCardPage({Key? key}) : super(key: key);
+    postCardPage(
+      {Key key,
+      this.uid,
+      this.pid,
+      this.touXiang,
+      this.userName,
+      this.time,
+      this.device,
+      this.text,
+      this.tag,
+      this.imageList,
+      this.likes,
+      this.comments,
+      this.forwards,
+      this.likeMode = 0,
+      this.followMode = 0})
+      : super(key: key);
+  int uid;
+  int pid;
+  String touXiang;
+  String userName;
+  String time;
+  String device;
+  String text;
+  String tag;
+  List<String> imageList;
+  int likes;
+  int comments;
+  int forwards;
+  int likeMode;
+  int followMode;
 
   @override
   State<postCardPage> createState() => _postCardPageState();
 }
 
 class _postCardPageState extends State<postCardPage> {
-
   List<Widget> widgetList = [Image(
           image: AssetImage("lib/assets/rotationChart/rotation1.jpg"), height: 70, width: 70),
           Image(
@@ -85,20 +115,24 @@ class _postCardPageState extends State<postCardPage> {
                                   height: 1.5),
                               textAlign: TextAlign.start)
                         ])),
-                    // actions: <Widget>[
-                    //   widget.uid == int.parse(UID)
-                    //       ? Text("")
-                    //       : IconButton(
-                    //           color: widget.followMode == 1
-                    //               ? Colors.red[700]
-                    //               : Colors.black,
-                    //           icon: widget.followMode == 1
-                    //               ? Icon(MyIcons.followFont, size: 28)
-                    //               : Icon(MyIcons.followFont),
-                    //           onPressed: () {
-                    //             showFollowDialog(context);
-                    //           })
-                    // ]
+                    actions: <Widget>[
+                      // widget.uid == int.parse(UID)
+                      //     ? Text("")
+                      //     : 
+                          IconButton(
+
+                              color: widget.followMode == 1
+                                  ? Colors.red[700]
+                                  : Colors.black,
+                              icon: widget.followMode == 1
+                                  ? Icon(MyIcons.followFont, size: 28)
+                                  : Icon(MyIcons.followFont),
+                              onPressed: () {
+                                 showFollowDialog(context);
+                                print("click");
+                              }
+                              )
+                    ]
                     ),
                 body: Neumorphic(
                     style: NeumorphicStyle(
@@ -153,42 +187,37 @@ class _postCardPageState extends State<postCardPage> {
                                 children: [
                                   new Row(children: <Widget>[
                                     new Row(children: [
-                                      IconButton(
-                                       icon: Icon(Icons.thumb_up),
-                                        iconSize: 28,
-                                        onPressed: (){},
-                                          // color: widget.likeMode == 1
-                                          //     ? Color.fromARGB(
-                                          //         255, 176, 210, 176)
-                                          //     : Colors.black,
-                                          // icon: widget.likeMode == 1
-                                          //     ? Icon(MyIcons.likeFont, size: 28)
-                                          //     : Icon(MyIcons.likeFont),
-                                          // onPressed: () {
-                                          //   if (widget.likeMode == 0) {
-                                          //     updatePostLikeCommShare(
-                                          //         widget.pid,
-                                          //         widget.likes + 1,
-                                          //         widget.comments,
-                                          //         widget.forwards);
-                                          //     setState(() {
-                                          //       widget.likes += 1;
-                                          //       widget.likeMode = 1;
-                                          //     });
-                                          //   } else {
-                                          //     updatePostLikeCommShare(
-                                          //         widget.pid,
-                                          //         widget.likes - 1,
-                                          //         widget.comments,
-                                          //         widget.forwards);
-                                          //     setState(() {
-                                          //       widget.likes -= 1;
-                                          //       widget.likeMode = 0;
-                                          //     });
-                                          //   }
-                                          // }
-
-                                          ),
+                                     IconButton(
+                                          color: widget.likeMode == 1
+                                              ? Colors.red
+                                              : Colors.black,
+                                          icon: widget.likeMode == 1
+                                              ? Icon(MyIcons.likeFont, size: 28)
+                                              : Icon(MyIcons.likeFont),
+                                          onPressed: () {
+                                            //print(widget.likeMode.toString()+"11111111111");
+                                            if (widget.likeMode == 0) {
+                                              // updatePostLikeCommShare(
+                                              //     widget.pid,
+                                              //     widget.likes + 1,
+                                              //     widget.comments,
+                                              //     widget.forwards);
+                                              setState(() {
+                                                //widget.likes += 1;
+                                                widget.likeMode = 1;
+                                              });
+                                            } else {
+                                              // updatePostLikeCommShare(
+                                              //     widget.pid,
+                                              //     widget.likes - 1,
+                                              //     widget.comments,
+                                              //     widget.forwards);
+                                              setState(() {
+                                               // widget.likes -= 1;
+                                                widget.likeMode = 0;
+                                              });
+                                            }
+                                          }),
                                       Text(
                                         // '${widget.likes}',
                                         "3",
@@ -252,48 +281,51 @@ class _postCardPageState extends State<postCardPage> {
 
 
 
-  // showFollowDialog(BuildContext context) {
-  //   //设置按钮
-  //   Widget cancelButton = FlatButton(
-  //     child: Text("取消"),
-  //     onPressed: () {
-  //       Navigator.of(context).pop();
-  //     },
-  //   );
-  //   Widget continueButton = FlatButton(
-  //     child: Text("确定"),
-  //     onPressed: () {
-  //       if (widget.followMode == 0)
-  //         insertFollow(widget.uid, int.parse(UID));
-  //       else
-  //         deleteFollow(widget.uid, int.parse(UID));
-  //       setState(() {
-  //         widget.followMode = 1 - widget.followMode;
-  //       });
-  //       Navigator.of(context).pop();
-  //     },
-  //   );
+  showFollowDialog(BuildContext context) {
+    //设置按钮
+    Widget cancelButton = FlatButton(
+      child: Text("取消"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("确定"),
+      onPressed: () {
+        if (widget.followMode == 0)
+          //insertFollow(widget.uid, int.parse(UID))
+          print("insert")
+          ;
+        else
+          // deleteFollow(widget.uid, int.parse(UID));
+          print('delect');
+        setState(() {
+          widget.followMode = 1 - widget.followMode;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+  
+    //设置对话框
+    AlertDialog alert = AlertDialog(
+        title: Text("关注提示框"),
+        content: Text("确定关注吗？"),
+        actions: [continueButton, cancelButton]);
 
-  //   //设置对话框
-  //   AlertDialog alert = AlertDialog(
-  //       title: Text("关注提示框"),
-  //       content: Text("确定关注吗？"),
-  //       actions: [continueButton, cancelButton]);
+    AlertDialog alert2 = AlertDialog(
+        title: Text("取消关注提示框"),
+        content: Text("确定取消关注吗？"),
+        actions: [continueButton, cancelButton]);
 
-  //   AlertDialog alert2 = AlertDialog(
-  //       title: Text("取消关注提示框"),
-  //       content: Text("确定取消关注吗？"),
-  //       actions: [continueButton, cancelButton]);
-
-  //   //显示对话框
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       if (widget.followMode == 0)
-  //         return alert;
-  //       else
-  //         return alert2;
-  //     },
-  //   );
-  // }
+    //显示对话框
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        if (widget.followMode == 0)
+          return alert;
+        else
+          return alert2;
+      },
+    );
+  }
   }

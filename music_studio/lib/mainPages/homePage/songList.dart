@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelection.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
 
 class songList extends StatefulWidget {
   //songList({Key? key}) : super(key: key);
@@ -28,7 +30,13 @@ class _songListState extends State<songList> {
             width: 10,
           ),
           Expanded(
-            child: Column(
+            child:  InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => songListDetail()));
+                },
+                
+            child:Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -64,7 +72,7 @@ class _songListState extends State<songList> {
                  
                 )
               ],
-            ),
+            ),),
           ),
          
         ],
