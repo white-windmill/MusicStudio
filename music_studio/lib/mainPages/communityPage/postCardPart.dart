@@ -3,7 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:music_studio/assets/myIcons.dart';
 
 class postCardPage extends StatefulWidget {
-    postCardPage(
+  postCardPage(
       {Key key,
       this.uid,
       this.pid,
@@ -40,16 +40,23 @@ class postCardPage extends StatefulWidget {
 }
 
 class _postCardPageState extends State<postCardPage> {
-  List<Widget> widgetList = [Image(
-          image: AssetImage("lib/assets/rotationChart/rotation1.jpg"), height: 70, width: 70),
-          Image(
-          image: AssetImage("lib/assets/rotationChart/rotation2.jpg"), height: 70, width: 70),
-          Image(
-          image: AssetImage("lib/assets/rotationChart/rotation3.jpg"), height: 70, width: 70),
-          ];
+  List<Widget> widgetList = [
+    Image(
+        image: AssetImage("lib/assets/rotationChart/rotation1.jpg"),
+        height: 70,
+        width: 70),
+    Image(
+        image: AssetImage("lib/assets/rotationChart/rotation2.jpg"),
+        height: 70,
+        width: 70),
+    Image(
+        image: AssetImage("lib/assets/rotationChart/rotation3.jpg"),
+        height: 70,
+        width: 70),
+  ];
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: Container(
             padding: EdgeInsets.all(15.0),
@@ -74,7 +81,8 @@ class _postCardPageState extends State<postCardPage> {
                             margin: EdgeInsets.only(top: 5, bottom: 5, left: 5),
                             child: CircleAvatar(
                                 radius: 30,
-                                backgroundImage: AssetImage("lib/assets/rotationChart/rotation1.jpg"),
+                                backgroundImage: AssetImage(
+                                    "lib/assets/rotationChart/rotation1.jpg"),
                                 child: Container(
                                     padding: EdgeInsets.only(left: 10),
                                     alignment: Alignment.center,
@@ -118,22 +126,19 @@ class _postCardPageState extends State<postCardPage> {
                     actions: <Widget>[
                       // widget.uid == int.parse(UID)
                       //     ? Text("")
-                      //     : 
-                          IconButton(
-
-                              color: widget.followMode == 1
-                                  ? Colors.red[700]
-                                  : Colors.black,
-                              icon: widget.followMode == 1
-                                  ? Icon(MyIcons.followFont, size: 28)
-                                  : Icon(MyIcons.followFont),
-                              onPressed: () {
-                                 showFollowDialog(context);
-                                print("click");
-                              }
-                              )
-                    ]
-                    ),
+                      //     :
+                      IconButton(
+                          color: widget.followMode == 1
+                              ? Colors.red[700]
+                              : Colors.black,
+                          icon: widget.followMode == 1
+                              ? Icon(MyIcons.followFont, size: 28)
+                              : Icon(MyIcons.followFont),
+                          onPressed: () {
+                            showFollowDialog(context);
+                            print("click");
+                          })
+                    ]),
                 body: Neumorphic(
                     style: NeumorphicStyle(
                         boxShape: NeumorphicBoxShape.roundRect(
@@ -187,7 +192,7 @@ class _postCardPageState extends State<postCardPage> {
                                 children: [
                                   new Row(children: <Widget>[
                                     new Row(children: [
-                                     IconButton(
+                                      IconButton(
                                           color: widget.likeMode == 1
                                               ? Colors.red
                                               : Colors.black,
@@ -213,14 +218,14 @@ class _postCardPageState extends State<postCardPage> {
                                               //     widget.comments,
                                               //     widget.forwards);
                                               setState(() {
-                                               // widget.likes -= 1;
+                                                // widget.likes -= 1;
                                                 widget.likeMode = 0;
                                               });
                                             }
                                           }),
                                       Text(
-                                        // '${widget.likes}',
-                                        "3",
+                                          // '${widget.likes}',
+                                          "3",
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
@@ -238,8 +243,7 @@ class _postCardPageState extends State<postCardPage> {
                                     new Row(children: [
                                       IconButton(
                                           icon: Icon(Icons.chat),
-                                          onPressed: () {
-                                          }),
+                                          onPressed: () {}),
                                       Text('5',
                                           style: TextStyle(
                                               color: Color(0xFF111111),
@@ -257,9 +261,7 @@ class _postCardPageState extends State<postCardPage> {
                                     SizedBox(width: 40),
                                     new Row(children: [
                                       IconButton(
-                                          onPressed: () {
-                                            
-                                          },
+                                          onPressed: () {},
                                           icon: Icon(Icons.launch)),
                                       Text('6',
                                           style: TextStyle(
@@ -279,8 +281,6 @@ class _postCardPageState extends State<postCardPage> {
                                 ])))))));
   }
 
-
-
   showFollowDialog(BuildContext context) {
     //设置按钮
     Widget cancelButton = FlatButton(
@@ -294,8 +294,7 @@ class _postCardPageState extends State<postCardPage> {
       onPressed: () {
         if (widget.followMode == 0)
           //insertFollow(widget.uid, int.parse(UID))
-          print("insert")
-          ;
+          print("insert");
         else
           // deleteFollow(widget.uid, int.parse(UID));
           print('delect');
@@ -305,7 +304,7 @@ class _postCardPageState extends State<postCardPage> {
         Navigator.of(context).pop();
       },
     );
-  
+
     //设置对话框
     AlertDialog alert = AlertDialog(
         title: Text("关注提示框"),
@@ -328,4 +327,4 @@ class _postCardPageState extends State<postCardPage> {
       },
     );
   }
-  }
+}
