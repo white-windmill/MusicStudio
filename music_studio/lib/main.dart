@@ -8,6 +8,8 @@ import 'loginPage/login.dart';
 import 'mainPages/communityPage/communityAll.dart';
 import 'mainPages/homePage/homeAll.dart';
 import 'mainPages/minePage/mineAll.dart';
+import 'mainPages/minePage/mysong.dart';
+import 'mainPages/minePage/mysongsheet.dart';
 void main() {
   runApp(Router());
 }
@@ -46,6 +48,8 @@ class Router extends StatelessWidget {
     '/bottom':(context) => Bottom(),
     '/sign_up':(context) => SignUp(),
     '/forget_password':(context) => ForgetPassword(),
+    '/my_song':(context) => MySong(),
+    '/my_songsheet':(context) => MySongSheet(),
   };
 
   @override

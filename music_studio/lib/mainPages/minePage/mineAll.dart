@@ -136,40 +136,40 @@ class _minePageState extends State<minePage> {
           SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
-                Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10.0,
-                      bottom: 10.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ContactItem(
-                          icon: Icons.favorite,
-                          title: '巴拉巴拉',
-                          onPressed: () {
-                            //路由跳转
-                          print("click");
-                          },
-                        ),
-                        ContactItem(
-                          icon: Icons.grade,
-                          title: '巴拉巴拉',
-                        ),
-                        ContactItem(
-                          icon: Icons.brightness_4,
-                          title: '巴拉巴拉',
-                        ),
-                        ContactItem(
-                          icon: Icons.airplanemode_active,
-                          title: '巴拉巴拉',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Container(
+                //   color: Colors.white,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(
+                //       top: 10.0,
+                //       bottom: 10.0,
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //       children: [
+                //         ContactItem(
+                //           icon: Icons.favorite,
+                //           title: '巴拉巴拉',
+                //           onPressed: () {
+                //             //路由跳转
+                //           print("click");
+                //           },
+                //         ),
+                //         ContactItem(
+                //           icon: Icons.grade,
+                //           title: '巴拉巴拉',
+                //         ),
+                //         ContactItem(
+                //           icon: Icons.brightness_4,
+                //           title: '巴拉巴拉',
+                //         ),
+                //         ContactItem(
+                //           icon: Icons.airplanemode_active,
+                //           title: '巴拉巴拉',
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 Container(
                   color: Colors.white,
                   margin: const EdgeInsets.only(top: 10.0),
@@ -189,6 +189,7 @@ class _minePageState extends State<minePage> {
                               title: '我的歌曲',
                               onPressed: () {
                                 //路由跳转
+                                Navigator.pushNamed(context, '/my_song');
                               
                               },
                             ),
@@ -201,6 +202,10 @@ class _minePageState extends State<minePage> {
                             ),
                             MenuItem(
                               title: '我的歌单',
+                              onPressed: () {
+                                //路由跳转
+                                Navigator.pushNamed(context, '/my_songsheet');
+                              },
                             ),
                           ],
                         ),
@@ -239,22 +244,6 @@ class _minePageState extends State<minePage> {
                       ),
                       SizedBox(
                         height: 20,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black26,
-                            width: 1.0,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            MenuItem(
-                              title: '设置',
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
