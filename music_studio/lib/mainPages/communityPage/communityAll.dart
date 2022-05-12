@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/communityPage/articleList.dart';
 import 'package:music_studio/mainPages/communityPage/postCardPart.dart';
 import 'package:music_studio/mainPages/homePage/searchMessagePart.dart';
 
@@ -22,7 +23,8 @@ class communityPage extends StatelessWidget {
          body: Container(
            child:Column(
              children: [
-               postCardPage(),
+               Expanded(child:  articleListPart(),),
+              
              ],
            )
           ,

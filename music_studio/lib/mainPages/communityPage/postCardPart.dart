@@ -9,13 +9,13 @@ class postCardPage extends StatefulWidget {
       this.pid,
       this.touXiang,
       this.userName,
-      this.time,
+      this.articletime,
       this.device,
-      this.text,
+      this.articlecontent,
       this.tag,
       this.imageList,
-      this.likes,
-      this.comments,
+      this.articlelike,
+      this.articlecomment,
       this.forwards,
       this.likeMode = 0,
       this.followMode = 0})
@@ -24,13 +24,13 @@ class postCardPage extends StatefulWidget {
   int pid;
   String touXiang;
   String userName;
-  String time;
+  String articletime;
   String device;
-  String text;
+  String articlecontent;
   String tag;
   List<String> imageList;
-  int likes;
-  int comments;
+  int articlelike;
+  int articlecomment;
   int forwards;
   int likeMode;
   int followMode;
@@ -40,22 +40,14 @@ class postCardPage extends StatefulWidget {
 }
 
 class _postCardPageState extends State<postCardPage> {
-  List<Widget> widgetList = [
-    Image(
-        image: AssetImage("lib/assets/rotationChart/rotation1.jpg"),
-        height: 70,
-        width: 70),
-    Image(
-        image: AssetImage("lib/assets/rotationChart/rotation2.jpg"),
-        height: 70,
-        width: 70),
-    Image(
-        image: AssetImage("lib/assets/rotationChart/rotation3.jpg"),
-        height: 70,
-        width: 70),
-  ];
+   List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
+      widgetList.clear();
+    for (int i = 0; i < widget.imageList.length; ++i) {
+      widgetList.add(Image(
+          image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
+    }
     return Padding(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: Container(
@@ -150,7 +142,7 @@ class _postCardPageState extends State<postCardPage> {
                         child: new ListView(children: [
                           Container(
                               alignment: Alignment.topLeft,
-                              child: Text("  " + "听了周杰伦的歌，又是快乐的一天",
+                              child: Text(widget.articlecontent,
                                   style: TextStyle(
                                       color: Color(0xFF111111),
                                       decorationStyle:
@@ -224,8 +216,8 @@ class _postCardPageState extends State<postCardPage> {
                                             }
                                           }),
                                       Text(
-                                          // '${widget.likes}',
-                                          "3",
+                                          '${widget.articlelike}',
+                                          
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
@@ -244,7 +236,7 @@ class _postCardPageState extends State<postCardPage> {
                                       IconButton(
                                           icon: Icon(Icons.chat),
                                           onPressed: () {}),
-                                      Text('5',
+                                      Text('${widget.articlecomment}',
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
