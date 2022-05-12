@@ -39,6 +39,7 @@ dependencies:
   crypto: ^3.0.1
   connectivity: ^3.0.6
   path_provider: ^2.0.4
+  convert: ^3.0.1
 
 dev_dependencies:
   flutter_test:
