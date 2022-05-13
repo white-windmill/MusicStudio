@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:music_studio/GetMusic.dart';
+import 'package:music_studio/common/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:music_studio/main.dart';
 
@@ -166,7 +168,7 @@ class InputNumber extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
                 borderSide: BorderSide(width: 2, color: Colors.white)),
-            labelText: '用户名',
+            labelText: '手机号',
             labelStyle: TextStyle(color: Colors.white),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
           ),
@@ -215,9 +217,8 @@ class LoginButton extends StatelessWidget {
         print('点击了登录！');
         print('用户名：' + phoneNumberController.text);
         print('密码：' + passwordController.text);
-        Navigator.pushNamed(context, '/bottom');
-        _login(username);
-        // _login(username, password, context);
+        // Navigator.pushNamed(context, '/bottom');
+        _login(username, password, context);
       },
       child: Container(
           width: 300.0,
@@ -236,33 +237,54 @@ class LoginButton extends StatelessWidget {
   }
 }
 
-_login(String keywords) async {
-  GetMusic.search(keywords);
+_login(String username, String password, BuildContext context) async {
+  //json
+  // var url = Uri.parse(Api.url + '/api/sign/');
+  // var response = await http.post(url,
+  //     headers: {"content-type": "application/json"},
+  //     body: '{"username": "$username", "password": "' +
+  //         Api.md5(password) +
+  //         '"}');
+  // int id = jsonDecode(response.body)["id"];
+  // print("iiiiiiiiiiiiiiiiiiiiiddddddddddddddddddd");
+  // print(id);
+  // print('Response body: ${response.body}');
+    var url = Api.url + '/api/sign/';
+try{
+     Map<String,dynamic> map = Map();
+     map['userid'] = username;
+     map['password'] = password;
+      var dio = Dio();
+      var response = await dio.get(url,queryParameters: map).timeout(Duration(seconds: 3));
+      print('Response: $response');
+      Map<String,dynamic> data = response.data;
+      print(data['ret']);
+      if (data['ret'] == 0) {
+        
+    Fluttertoast.showToast(msg: '登录成功!');
+    phoneNumberController.clear();
+    passwordController.clear();
+    Navigator.pushNamed(context, '/bottom');
+    // Navigator.pushNamed(context, '/bottom',
+    //     arguments: {'username': username, 'password': password});
 
-  
 
+      }
+      else{
+        Fluttertoast.showToast(msg: '用户名或密码错误!');
+      }
+    }catch(e){
+      print(e);
+      return null;
+    }
+  // if (response.body != '') {
+  //   Navigator.pushNamed(context, '/main',
+  //       arguments: {'username': username, 'password': password});
+
+  //   setUserName(id ,username);
+  // } else
+  //   Fluttertoast.showToast(msg: '用户名或密码错误');
 }
-
-// _login(String username, String password, BuildContext context) async {
-//   //json
-//   var url = Uri.parse(Api.url + '/user/login');
-//   var response = await http.post(url,
-//       headers: {"content-type": "application/json"},
-//       body: '{"username": "${username}", "password": "' +
-//           Api.md5(password) +
-//           '"}');
-//   int id = jsonDecode(response.body)["id"];
-//   print("iiiiiiiiiiiiiiiiiiiiiddddddddddddddddddd");
-//   print(id);
-//   print('Response body: ${response.body}');
-//   if (response.body != '') {
-//     Navigator.pushNamed(context, '/main',
-//         arguments: {'username': username, 'password': password});
-
-//     setUserName(id ,username);
-//   } else
-//     Fluttertoast.showToast(msg: '用户名或密码错误');
-// }
 
 // _postParam() async {
 //   //Param

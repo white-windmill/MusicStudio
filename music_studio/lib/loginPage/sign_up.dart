@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_studio/common/api.dart';
 
 
 var _phone = new TextEditingController();
+var _name = new TextEditingController();
 var _password = new TextEditingController();
 var _passwordsure = new TextEditingController();
 var flag;
@@ -29,6 +32,7 @@ class SignUp extends StatelessWidget {
               child: TextButton(
                 onPressed: () {//清除数据
                   _phone.clear();
+                  _name.clear();
                   _password.clear();
                   _passwordsure.clear();
                   Navigator.pushNamed(context, '/login');
@@ -60,7 +64,7 @@ class Layout extends StatelessWidget {
         children: <Widget>[
           SizedBox(height: 100),
           Text(
-            "欢迎来到这个注册界面",
+            "注册新用户",
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -82,6 +86,28 @@ class Layout extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: "手机号",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30), //初始文本框为圆角边框
+                      borderSide: BorderSide(
+                          width: 2, color: Colors.white), //初始时文本框边框颜色
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)), //输入时文本框为圆角边框
+                  ),
+                ),
+              )),
+              Padding(
+              padding: EdgeInsets.fromLTRB(50, 0, 50, 20),
+              child: Theme(
+                data: ThemeData(
+                    primaryColor: Colors.white,
+                    hintColor: Colors.white), //点击文本框时边框颜色 and 提示字颜色
+                child: TextField(
+                  controller: _name,
+                  // keyboardType: TextInputType.number,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: "用户名",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30), //初始文本框为圆角边框
                       borderSide: BorderSide(
@@ -139,16 +165,18 @@ class Layout extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 var phonenumber = _phone.text;
+                var username = _name.text;
                 var passwordnumber = _password.text;
                 var passwordsurenumber = _passwordsure.text;
                 // print(flag);
                 if (passwordnumber == passwordsurenumber &&
                     passwordsurenumber.isNotEmpty &&
                     passwordnumber.isNotEmpty &&
-                    phonenumber.isNotEmpty) {
-                  // _insert(phonenumber, passwordnumber, context);
+                    phonenumber.isNotEmpty && username.isNotEmpty) {
+                  _insert(username,phonenumber, passwordnumber, context);
                 } else if (phonenumber.isEmpty)
                   Fluttertoast.showToast(msg: "请输入手机号!");
+                  else if(username.isEmpty) Fluttertoast.showToast(msg: "请输入用户名!");
                 else if (passwordnumber != passwordsurenumber)
                   Fluttertoast.showToast(msg: "密码不一致!");
                 else if (passwordnumber.isEmpty)
@@ -176,134 +204,46 @@ class Layout extends StatelessWidget {
   }
 }
 
-class VerButton extends StatefulWidget {
-  VerButton({Key key}) : super(key: key);
+_insert(String username, String userid,String password, BuildContext context) async {
+  var url = Api.url + '/api/user/';
 
-  @override
-  _VerButtonState createState() => _VerButtonState();
-}
-
-class _VerButtonState extends State<VerButton> {
-  bool clickable = true; //确定按钮是否可以按下
-  String buttonText = "发送验证码";
-  int count = 60;
-  Timer timer; //设定计时器
-  TextEditingController mController = new TextEditingController();
-
-//验证用户是否在数据库内
-//setState函数需要在可变组件内使用，故_check函数需要定义在组件内作为内置函数方可使用
-//   _check(String username, BuildContext context) async {
-//     var url = Uri.parse(Api.url + '/user/check?username=' + username);
-//     var response = await http.post(url);
-//     print('Response body: ${response.body}');
-//     if (response.body == '1') {
-//       //respons返回1说明用户在数据库中存在，不可以发送验证码
-//       Fluttertoast.showToast(msg: '手机号已注册!');
-//     } else {
-//       setState(() {
-//         _buttonClickListen(); //监听函数，用于设置按钮的是否可点
-//       });
-//       print('生成验证码：' + flag); //将生成的4位随机验证码打印到终端
-//       Fluttertoast.showToast(msg: '验证码已发送!');
-//     }
-//   }
-
-  void _buttonClickListen() {
-    setState(() {
-      if (clickable) {
-        //当按钮可点击时
-        clickable = false; //按钮状态标记
-        _initTimer();
-        flag = _randomBit(4);
-      } //当按钮不可点击时
-      return null; //返回null按钮禁止点击
-    });
-  }
-
-  _randomBit(int len) {//随机生成四位数字
-    String scope = '0123456789';
-    String result = '';
-    for (int i = 0; i < len; i++) {
-      result = result + scope[Random().nextInt(scope.length)];
-    }
-    return result;
-  }
-
-  void _initTimer() {
-    timer = new Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      count--;
-      setState(() {
-        if (count == 0) {
-          timer.cancel(); //倒计时结束取消定时器
-          count = 60; //重置时间
-          clickable = true;
-          buttonText = '发送验证码'; //重置按钮文本
-        } else {
-          buttonText = '${count}S'; //更新文本内容
-        }
+try{
+      FormData formData = FormData.fromMap({
+        'username':username,
+        'password':password,
+        'userid':userid
       });
-    });
-  }
+      var dio = Dio();
+      var response = await dio.post(url,data: formData).timeout(Duration(seconds: 3));
+      print('Response: $response');
+    Fluttertoast.showToast(msg: '注册成功!');
+    _phone.clear();
+    _name.clear();
+    _password.clear();
+    _passwordsure.clear();
+    Navigator.pushNamed(context, '/login');
+    }catch(e){
+      print(e);
+      return null;
+    }
 
-  void dispose() {
-    timer?.cancel(); //销毁计时器
-    timer = null;
-    mController.dispose();
-    super.dispose();
+  // var url = Uri.parse(Api.url + '/api/user/');
+  // String id = "100";
+  // // var url_check = Uri.parse(Api.url + '/api/user/username=' + username);
+  // // var response_check = await http.post(url_check);
+  // // if (response_check.body == '1')
+  // //   Fluttertoast.showToast(msg: '该手机号已注册！');
+  // // else {
+  //   var response = await http.post(url,
+  //       headers: {"content-type": "application/x-www-form-urlencoded"},
+  //       body: '{"username": "$username", "password": "' +
+  //           Api.md5(password) +
+  //           '","userid": "$id"}');
+  //   print('Response body: ${response.body}');
+  //   Fluttertoast.showToast(msg: '注册成功!');
+  //   _phone.clear();
+  //   _password.clear();
+  //   _passwordsure.clear();
+  //   Navigator.pushNamed(context, '/login');
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (_phone.text.length == 11 && clickable == true) {
-          String username = _phone.text;
-          // _check(username, context);
-        } else {
-          if (clickable == true) {
-            if (_phone.text.isEmpty)
-              Fluttertoast.showToast(msg: '请输入手机号！');
-            else if (_phone.text.length != 11)
-              Fluttertoast.showToast(msg: '请输入正确的手机号！');
-          }
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-        height: 50,
-        width: 125,
-        decoration: BoxDecoration(
-            color: Colors.blue, borderRadius: BorderRadius.circular(30)),
-        child: Text(
-          buttonText,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// _insert(String username, String password, BuildContext context) async {
-//   var url = Uri.parse(Api.url + '/user/insert');
-//   var url_check = Uri.parse(Api.url + '/user/check?username=' + username);
-//   var response_check = await http.post(url_check);
-//   if (response_check.body == '1')
-//     Fluttertoast.showToast(msg: '该手机号已注册！');
-//   else {
-//     var response = await http.post(url,
-//         headers: {"content-type": "application/json"},
-//         body: '{"username": "${username}", "password": "' +
-//             Api.md5(password) +
-//             '"}');
-//     print('Response body: ${response.body}');
-//     Fluttertoast.showToast(msg: '注册成功!');
-//     _phone.clear();
-//     _password.clear();
-//     _passwordsure.clear();
-//     _verification.clear();
-//     Navigator.pushNamed(context, '/login');
-//   }
 // }
