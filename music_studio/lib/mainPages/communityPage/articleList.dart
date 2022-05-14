@@ -17,7 +17,7 @@ class articleListPart extends StatefulWidget {
 class _articleListPartState extends State<articleListPart> {
   List<Widget> widgetList = [];
   @override
-    void initState() {
+  void initState() {
     //初始化函数、带监听滑动功能
     super.initState();
     getInfor();
@@ -25,28 +25,30 @@ class _articleListPartState extends State<articleListPart> {
 
   getInfor() async {
     var url = Uri.parse(Api.url + '/api/article/all/');
-    var response = await http.post(url,
-        headers: {"content-type": "application/json"},
-        );
+    var response = await http.post(
+      url,
+      headers: {"content-type": "application/json"},
+    );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
     formlist = data["data"];
     print(formlist[0]['articleid']);
     listLength = formlist.length;
     setState(() {});
-        for (var item in formlist) {
+    for (var item in formlist) {
       List<String> tmp = [];
-      tmp.add('http://124.220.169.238:8000/media/'+item['articlepic1']);
-      tmp.add('http://124.220.169.238:8000/media/'+item['articlepic2']);
-      tmp.add('http://124.220.169.238:8000/media/'+item['articlepic3']);
+      tmp.add('http://124.220.169.238:8000/media/' + item['articlepic1']);
+      tmp.add('http://124.220.169.238:8000/media/' + item['articlepic2']);
+      tmp.add('http://124.220.169.238:8000/media/' + item['articlepic3']);
       widgetList.add(new postCardPage(
-          articletime: item['articletime'].toString(),
-          articlecontent: item['articlecontent'].toString(),
-          articlelike:item['articlelike'],
-          articlecomment:item['articlecomment'],
-          imageList: tmp,
-          ));
+        articletime: item['articletime'].toString(),
+        articlecontent: item['articlecontent'].toString(),
+        articlelike: item['articlelike'],
+        articlecomment: item['articlecomment'],
+        imageList: tmp,
+      ));
     }
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(

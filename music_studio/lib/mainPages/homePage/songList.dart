@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_studio/mainPages/homePage/editorialSelection.dart';
-import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
+import 'package:music_studio/mainPages/homePage/songListPage.dart';
+
 
 class songList extends StatefulWidget {
   //songList({Key? key}) : super(key: key);
@@ -11,6 +11,8 @@ class songList extends StatefulWidget {
 
 class _songListState extends State<songList> {
   @override
+
+
   Widget build(BuildContext context) {
     return Container(
       child: Row(
@@ -30,51 +32,47 @@ class _songListState extends State<songList> {
             width: 10,
           ),
           Expanded(
-            child:  InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => songListDetail()));
-                },
-                
-            child:Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    child: Row(
-                  children: [
-                    Text(
-                      '   热歌榜',
-                      style: TextStyle(
-                        fontSize: 24,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => songListPage()));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: Row(
+                    children: [
+                      Text(
+                        '   热歌榜',
+                        style: TextStyle(
+                          fontSize: 24,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '·每周更新',
-                      style: TextStyle(
-                        fontSize: 12,
+                      Text(
+                        '·每周更新',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                  ],
-                )),
-                Container(
-                  //margin: EdgeInsets.fromLTRB(20.0, 0, 0.0, 5.0),
-                  child: ListView(
+                    ],
+                  )),
+                  Container(
+                      //margin: EdgeInsets.fromLTRB(20.0, 0, 0.0, 5.0),
+                      child: ListView(
                     shrinkWrap: true,
-                    itemExtent:35,
+                    itemExtent: 35,
                     padding: const EdgeInsets.all(10.0),
                     children: <Widget>[
                       const Text('1.孤勇者-陈奕迅'),
                       const Text('2.letting Go-蔡健雅'),
-                      const Text(
-                          '3.哪里都是你-队长'),
+                      const Text('3.哪里都是你-队长'),
                     ],
-                  )
-                 
-                )
-              ],
-            ),),
+                  ))
+                ],
+              ),
+            ),
           ),
-         
         ],
       ),
     );
