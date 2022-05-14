@@ -50,12 +50,15 @@ class Router extends StatelessWidget {
     '/forget_password':(context) => ForgetPassword(),
     '/my_song':(context) => MySong(),
     '/my_songsheet':(context) => MySongSheet(),
+    '/modify':(context) => ModifyInformation(),
   };
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/login',
+      // initialRoute: '/login',
+      initialRoute: '/bottom',
+
       //routes: routes,
       onGenerateRoute: (RouteSettings settings) {
         //统一处理

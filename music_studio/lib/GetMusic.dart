@@ -7,7 +7,7 @@ import 'utils/http_util.dart';
 
 
 class GetMusic {
-  static const URL_ROOT = 'http://music.turingmao.com';
+  static const URL_ROOT = '127.0.0.1:3000';
   static const URL_TOP_SONGS = '$URL_ROOT/top/list?idx=';
   static const URL_SONG_DETAIL = '$URL_ROOT/song/detail?ids=';
   static const URL_GET_LYRIC = '$URL_ROOT/lyric?id=';
