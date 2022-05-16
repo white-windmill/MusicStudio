@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:music_studio/assets/myIcons.dart';
+import 'package:music_studio/mainPages/communityPage/commentUserCard.dart';
 
 class postCardPage extends StatefulWidget {
   postCardPage(
       {Key key,
       this.uid,
       this.pid,
-      this.touXiang,
-      this.userName,
+      this.userimage,
+      this.username,
       this.articletime,
       this.device,
       this.articlecontent,
@@ -22,12 +23,13 @@ class postCardPage extends StatefulWidget {
       : super(key: key);
   int uid;
   int pid;
-  String touXiang;
-  String userName;
+  String userimage;
+  String username;
   String articletime;
   String device;
   String articlecontent;
   String tag;
+
   List<String> imageList;
   int articlelike;
   int articlecomment;
@@ -73,8 +75,8 @@ class _postCardPageState extends State<postCardPage> {
                             margin: EdgeInsets.only(top: 5, bottom: 5, left: 5),
                             child: CircleAvatar(
                                 radius: 30,
-                                backgroundImage: AssetImage(
-                                    "lib/assets/rotationChart/rotation1.jpg"),
+                                backgroundImage: NetworkImage(
+                                    widget.userimage),
                                 child: Container(
                                     padding: EdgeInsets.only(left: 10),
                                     alignment: Alignment.center,
@@ -89,7 +91,7 @@ class _postCardPageState extends State<postCardPage> {
                             children: [
                           Container(
                               alignment: Alignment.topLeft,
-                              child: Text("name",
+                              child: Text(widget.username,
                                   style: TextStyle(
                                       color: Color(0xFF111111),
                                       decorationStyle:
@@ -102,7 +104,7 @@ class _postCardPageState extends State<postCardPage> {
                                       wordSpacing: 10,
                                       height: 1.5),
                                   textAlign: TextAlign.start)),
-                          Text("2022-4-10",
+                          Text(widget.articletime,
                               style: TextStyle(
                                   color: Colors.grey,
                                   decorationStyle: TextDecorationStyle.double,
@@ -235,7 +237,10 @@ class _postCardPageState extends State<postCardPage> {
                                     new Row(children: [
                                       IconButton(
                                           icon: Icon(Icons.chat),
-                                          onPressed: () {}),
+                                          onPressed: () {
+                                             Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => commentUserCard()));
+                                          }),
                                       Text('${widget.articlecomment}',
                                           style: TextStyle(
                                               color: Color(0xFF111111),
@@ -253,7 +258,9 @@ class _postCardPageState extends State<postCardPage> {
                                     SizedBox(width: 40),
                                     new Row(children: [
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            
+                                          },
                                           icon: Icon(Icons.launch)),
                                       Text('6',
                                           style: TextStyle(

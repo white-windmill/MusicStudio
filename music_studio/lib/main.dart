@@ -57,8 +57,8 @@ class Router extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // initialRoute: '/login',
-      initialRoute: '/bottom',
+      initialRoute: '/login',
+      // initialRoute: '/bottom',
 
       //routes: routes,
       onGenerateRoute: (RouteSettings settings) {

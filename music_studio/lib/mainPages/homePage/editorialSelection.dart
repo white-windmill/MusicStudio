@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:music_studio/common/api.dart';
 import 'package:music_studio/mainPages/homePage/songList.dart';
 import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+int listLength = 0;
+List formlist = [];
 
 class editorialSelection extends StatefulWidget {
   // editorialSelection({Key? key}) : super(key: key);
@@ -11,7 +17,26 @@ class editorialSelection extends StatefulWidget {
 }
 
 class _editorialSelectionState extends State<editorialSelection> {
+  List<Widget> widgetList = [];
   @override
+  void initState() {
+    //初始化函数、带监听滑动功能
+    super.initState();
+    getInfor();
+  }
+
+  getInfor() async {
+    var url = Uri.parse(Api.url + '/api/playlist/rank/');
+    var response = await http.post(
+      url,
+      headers: {"content-type": "application/json"},
+    );
+    var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
+    formlist = data["data"];
+    print(formlist);
+    listLength = formlist.length;
+  }
+
   Widget build(BuildContext context) {
     return Container(
         child: Column(
@@ -29,28 +54,28 @@ class _editorialSelectionState extends State<editorialSelection> {
                 ),
               )),
             ])),
-         Container(
-           width: 500,
-           height: 250,
-           child: ListView(
+        Container(
+          width: 500,
+          height: 250,
+          child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             padding: const EdgeInsets.all(10.0),
             children: <Widget>[
-                 InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => songListDetail()));
-                },
-                child: recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),),
-             recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
-             recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
-             recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
-             recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
-             recommendItem(title: "学习歌单",picRoute: "lib/assets/rotationChart/rotation1.jpg",),
+              recommendItem(
+                playlistname: formlist[0]['playlistname'],
+                playlistimage: 'http://124.220.169.238:8000/media/' +
+                    formlist[0]['playlistimage'],
+                id: formlist[0]['id'].toString(),
+              ),
+              recommendItem(
+                playlistname: formlist[1]['playlistname'],
+                playlistimage: 'http://124.220.169.238:8000/media/' +
+                    formlist[1]['playlistimage'],
+                id: formlist[0]['id'].toString(),
+              ),
             ],
           ),
-          
         ),
       ],
     ));
@@ -58,27 +83,47 @@ class _editorialSelectionState extends State<editorialSelection> {
 }
 
 class recommendItem extends StatelessWidget {
-  const recommendItem({Key key, this.songListId, this.title, this.picRoute})
+  const recommendItem(
+      {Key key,
+      this.songListId,
+      this.playlistname,
+      this.playlistimage,
+      this.id})
       : super(key: key);
-  final String title;
+  final String playlistname;
   final String songListId;
-  final String picRoute;
+  final String playlistimage;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(children: <Widget>[
-        Container(
-          margin: EdgeInsets.fromLTRB(0.0, 5, 10.0, 0),
-          constraints: BoxConstraints(maxHeight: 150, maxWidth: 150),
-          child: Image.asset(picRoute, fit: BoxFit.cover),
-        ),
-        SizedBox(
-          width: 10,
-          height: 10,
-        ),
-        Text(title)
-      ]),
+    return InkWell(
+onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => songListDetail(
+                        playlistname: playlistname,
+                        playlistimage: playlistimage,
+                      )));
+        },
+      child: Container(
+        child: Column(children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(0.0, 5, 10.0, 0),
+            constraints: BoxConstraints(maxHeight: 150, maxWidth: 150),
+            child: Image.network(playlistimage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity),
+          ),
+          SizedBox(
+            width: 10,
+            height: 10,
+          ),
+          Text(playlistname)
+        ]),
+      ),
     );
   }
 }

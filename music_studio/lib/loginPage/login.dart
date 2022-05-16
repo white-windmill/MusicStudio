@@ -14,12 +14,10 @@ import 'package:music_studio/main.dart';
 final TextEditingController phoneNumberController = new TextEditingController();
 final TextEditingController passwordController = new TextEditingController();
 
-setUserName(int id,String username)  {
-  SharedPreferences prefs = SpUtil.prefs;
-  prefs.setInt('id', id);
-  prefs.setString('username',username);
+setUserName(String id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('id', id);
 }
-
 
 class Login extends StatelessWidget {
   @override
@@ -260,10 +258,15 @@ try{
       Map<String,dynamic> data = response.data;
       print(data['ret']);
       if (data['ret'] == 0) {
-        
+       
     Fluttertoast.showToast(msg: '登录成功!');
-    phoneNumberController.clear();
-    passwordController.clear();
+     setUserName(username);
+     String myid="111";
+     SharedPreferences preferences = await SharedPreferences.getInstance();
+     myid = preferences.get('id');
+     print(myid);
+    // phoneNumberController.clear();
+    // passwordController.clear();
     Navigator.pushNamed(context, '/bottom');
     // Navigator.pushNamed(context, '/bottom',
     //     arguments: {'username': username, 'password': password});

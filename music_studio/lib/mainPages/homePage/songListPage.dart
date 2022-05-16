@@ -3,10 +3,17 @@ import 'package:music_studio/assets/myIcons.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:music_studio/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 int listLength = 0;
 List formlist = [];
+String myid = '111';
 
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  myid = preferences.get('id');
+   print(myid);
+}
 class songListPage extends StatefulWidget {
   //songListPage({Key? key}) : super(key: key);
 
@@ -16,12 +23,7 @@ class songListPage extends StatefulWidget {
 
 class _songListPageState extends State<songListPage> {
   // List<Widget> widgetList = [];
-  @override
-  void initState() {
-    //初始化函数、带监听滑动功能
-    super.initState();
-    getInfor();
-  }
+
 
   getInfor() async {
     var url = Uri.parse(Api.url + '/api/music/rank/');
@@ -37,7 +39,17 @@ class _songListPageState extends State<songListPage> {
     setState(() {});
   
   }
-
+  @override
+  void initState() {
+    //初始化函数、带监听滑动功能
+    super.initState();
+    initThisPage();
+    getInfor();
+  }
+    @override
+  Future<void> initThisPage() async {
+    await _readShared();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -81,7 +93,7 @@ class _songListPageState extends State<songListPage> {
                         child: Row(children: [
                           Expanded(
                               child: Text(
-                            '  编辑精选歌单，为你挑选',
+                            '  每天最热排行榜',
                             style: TextStyle(fontSize: 15, color: Colors.grey),
                           )),
                         ])),

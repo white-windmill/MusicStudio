@@ -1,17 +1,42 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:music_studio/assets/myIcons.dart';
+import 'package:music_studio/common/api.dart';
 
+List formlist = [];
 class songListDetail extends StatefulWidget {
-  songListDetail({
-    Key key,
-  }) : super(key: key);
-  int songListLikeMode=0;
+  final String playlistname;
+  final String playlistimage;
+  songListDetail({Key key, this.playlistname,this.playlistimage}) : super(key: key);
+  int songListLikeMode = 0;
+
   @override
   State<songListDetail> createState() => _songListDetailState();
 }
 
 class _songListDetailState extends State<songListDetail> {
+  List<Widget> widgetList = [];
   @override
+  void initState() {
+    //初始化函数、带监听滑动功能
+    super.initState();
+    getInfor();
+  }
+
+  getInfor() async {
+    var url = Api.url + '/api/playlist/';
+    Map<String, dynamic> map = Map();
+    map['playlistname'] = widget.playlistname;
+    var dio = Dio();
+    var response =
+        await dio.get(url, queryParameters: map).timeout(Duration(seconds: 3));
+    // print('Response: $response');
+    Map<String, dynamic> data = response.data;
+    // print(data);
+    formlist=data["data"];
+    print(formlist);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -39,10 +64,11 @@ class _songListDetailState extends State<songListDetail> {
                   ),
                   height: 200,
                   width: double.infinity,
-                  child: Image.asset(
-                    "lib/assets/rotationChart/rotation1.jpg",
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(widget.playlistimage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity),
+                  ),
               Container(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,31 +99,14 @@ class _songListDetailState extends State<songListDetail> {
                     SizedBox(
                       height: 5,
                     ),
-                    // buildGrid(context)
+                    buildGrid(context),
                     songListItem(
-                      title: "晴天",
-                      source: "叶惠美",
-                      serial: 111,
-                      singer: "周杰伦",
+                       musicname: formlist[0]['musicname'],
+                      musicalbum: formlist[0]['musicalbum'],
+                      musicid: formlist[0]['musicid'].toString(),
+                      musicsinger: formlist[0]['musicsinger'],
                     ),
-                    songListItem(
-                      title: "以父之名",
-                      source: "叶惠美",
-                      serial: 111,
-                      singer: "周杰伦",
-                    ),
-                    songListItem(
-                      title: "你听得到",
-                      source: "叶惠美",
-                      serial: 111,
-                      singer: "周杰伦",
-                    ),
-                    songListItem(
-                      title: "东风破",
-                      source: "叶惠美",
-                      serial: 111,
-                      singer: "周杰伦",
-                    ),
+                   
                   ]))
             ],
           ),
@@ -155,16 +164,16 @@ class _songListDetailState extends State<songListDetail> {
 class songListItem extends StatefulWidget {
   songListItem({
     Key key,
-    this.title,
-    this.source,
-    this.serial,
-    this.singer,
+    this. musicname,
+    this.musicalbum,
+    this.musicid,
+    this.musicsinger,
     this.followMode = 0,
   }) : super(key: key);
-  final String title;
-  final String source;
-  final int serial;
-  final String singer;
+  final String  musicname;
+  final String musicalbum;
+  final String musicid;
+  final String musicsinger;
   int followMode;
   @override
   State<songListItem> createState() => _songListItemState();
@@ -188,7 +197,7 @@ class _songListItemState extends State<songListItem> {
               Container(
                 padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
                 child: Text(
-                  widget.title + "",
+                  widget. musicname + "",
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -197,7 +206,7 @@ class _songListItemState extends State<songListItem> {
               Container(
                 padding: EdgeInsets.fromLTRB(5, 2, 0, 2),
                 child: Text(
-                  widget.singer + "·" + widget.source + "",
+                  widget.musicsinger + "·" + widget.musicalbum + "",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 12,
@@ -266,4 +275,27 @@ class _songListItemState extends State<songListItem> {
       },
     );
   }
+}
+Widget buildGrid(BuildContext context) {
+  List<Widget> tiles = [];
+  Widget content;
+  int count = 0;
+  for (var item in formlist) {
+    count++;
+    tiles.add(InkWell(
+        onTap: () {
+          print("click me");
+        },
+        child: songListItem(
+                       musicname: item['musicname'],
+                      musicalbum: item['musicalbum'],
+                      musicid: item['musicid'].toString(),
+                      musicsinger: item['musicsinger'],
+                    ),
+        ));
+  }
+  content = new Column(
+    children: tiles,
+  );
+  return content;
 }

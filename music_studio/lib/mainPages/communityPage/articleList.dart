@@ -39,11 +39,14 @@ class _articleListPartState extends State<articleListPart> {
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic1']);
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic2']);
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic3']);
+      String time=item['articletime'].toString().substring(5,10)+' '+item['articletime'].toString().substring(11,16);
       widgetList.add(new postCardPage(
-        articletime: item['articletime'].toString(),
+        articletime: time,
         articlecontent: item['articlecontent'].toString(),
         articlelike: item['articlelike'],
         articlecomment: item['articlecomment'],
+        username: item['articleuserdata']['username'],
+        userimage: 'http://124.220.169.238:8000/media/'+item['articleuserdata']['userimage'],
         imageList: tmp,
       ));
     }
