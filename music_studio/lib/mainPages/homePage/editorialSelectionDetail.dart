@@ -34,7 +34,7 @@ class _songListDetailState extends State<songListDetail> {
     Map<String, dynamic> data = response.data;
     // print(data);
     formlist=data["data"];
-    print(formlist);
+    // print(formlist);
   }
 
   Widget build(BuildContext context) {

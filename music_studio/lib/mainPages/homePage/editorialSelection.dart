@@ -33,7 +33,7 @@ class _editorialSelectionState extends State<editorialSelection> {
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
     formlist = data["data"];
-    print(formlist);
+    // print(formlist);
     listLength = formlist.length;
   }
 

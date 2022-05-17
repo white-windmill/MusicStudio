@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:music_studio/mainPages/homePage/songListPage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:music_studio/common/api.dart';
 
+List rankFormlist = [];
 
 class songList extends StatefulWidget {
   //songList({Key? key}) : super(key: key);
@@ -10,8 +14,27 @@ class songList extends StatefulWidget {
 }
 
 class _songListState extends State<songList> {
-  @override
+  getInfor() async {
+    var url = Uri.parse(Api.url + '/api/music/rank/');
+    var response = await http.post(
+      url,
+      headers: {"content-type": "application/json"},
+    );
+    var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
+    rankFormlist = data["data"];
+    print(rankFormlist);
+    listLength = rankFormlist.length;
+    print(rankFormlist[0]['musicname']);
 
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    //初始化函数、带监听滑动功能
+    super.initState();
+    getInfor();
+  }
 
   Widget build(BuildContext context) {
     return Container(
@@ -64,9 +87,18 @@ class _songListState extends State<songList> {
                     itemExtent: 35,
                     padding: const EdgeInsets.all(10.0),
                     children: <Widget>[
-                      const Text('1.孤勇者-陈奕迅'),
-                      const Text('2.letting Go-蔡健雅'),
-                      const Text('3.哪里都是你-队长'),
+                      Text('1.' +
+                          rankFormlist[0]['musicname'] +
+                          '-' +
+                          rankFormlist[0]['musicsinger']),
+                      Text('2.' +
+                          rankFormlist[1]['musicname'] +
+                          '-' +
+                          rankFormlist[1]['musicsinger']),
+                      Text('3.' +
+                          rankFormlist[2]['musicname'] +
+                          '-' +
+                          rankFormlist[2]['musicsinger']),
                     ],
                   ))
                 ],
