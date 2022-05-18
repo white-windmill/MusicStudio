@@ -35,4 +35,35 @@ class MyIcons {
       const IconData(0xe613, fontFamily: 'myIcons', matchTextDirection: true);
   static const IconData add2Font =
       const IconData(0xe614, fontFamily: 'myIcons', matchTextDirection: true);
+      
+      static const IconData full_screen = const IconData(
+      0xe60b, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
+  static const IconData full_screen_exit = const IconData(
+      0xe7d0, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
+  static const IconData player_random = const IconData(
+      0xe61a, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
+  static const IconData player_cycle = const IconData(
+      0xe778, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
+  static const IconData player_single = const IconData(
+      0xe779, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
+  static const IconData player_list = const IconData(
+      0xe604, 
+      fontFamily: 'myIcon', 
+      matchTextDirection: true
+  );
 }
