@@ -7,14 +7,12 @@ import 'package:music_studio/mainPages/communityPage/commentUserCard.dart';
 class postCardPage extends StatefulWidget {
   postCardPage(
       {Key key,
-      this.uid,
-      this.pid,
+      this.articleid,
       this.userimage,
       this.username,
       this.articletime,
       this.device,
       this.articlecontent,
-      this.tag,
       this.imageList,
       this.articlelike,
       this.articlecomment,
@@ -22,14 +20,12 @@ class postCardPage extends StatefulWidget {
       this.likeMode = 0,
       this.followMode = 0})
       : super(key: key);
-  int uid;
-  int pid;
+  String articleid;
   String userimage;
   String username;
   String articletime;
   String device;
   String articlecontent;
-  String tag;
 
   List<String> imageList;
   int articlelike;
@@ -51,15 +47,15 @@ class _postCardPageState extends State<postCardPage> {
     //   widgetList.add(Image(
     //       image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
     // }
-    commentArea(String pid)  {
+    commentArea(String pid) {
       RenderBox renderBox = context.findRenderObject();
       var screenSize = renderBox.size;
       final option = showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
             return StatefulBuilder(builder: (context, state) {
-              return  commentAllIn(
-                pid: widget.pid.toString(),
+              return commentAllIn(
+                articleid: widget.articleid.toString(),
               );
             });
           });
@@ -252,7 +248,7 @@ class _postCardPageState extends State<postCardPage> {
                                           onPressed: () {
                                             //                          Navigator.of(context).push(
                                             // MaterialPageRoute(builder: (context) => commentUserCard()));
-                                            commentArea('5');
+                                            commentArea(widget.articleid);
                                           }),
                                       Text('${widget.articlecomment}', //评论
                                           style: TextStyle(

@@ -74,6 +74,11 @@ class _editorialSelectionState extends State<editorialSelection> {
                     formlist[1]['playlistimage'],
                 id: formlist[0]['id'].toString(),
               ),
+              picTextBtn(
+                playlistname: "失恋日记 | 换不同的场景 但哪里都是你",
+                playlistimage:
+                    'http://p3.music.126.net/BLMmLfUNu0zdprDISL_hTw==/109951165764406932.jpg?param=200y200',
+              ),
             ],
           ),
         ),
@@ -98,15 +103,57 @@ class recommendItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => songListDetail(
-                        playlistname: playlistname,
-                        playlistimage: playlistimage,
-                      )));
-        },
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => songListDetail(
+                      playlistname: playlistname,
+                      playlistimage: playlistimage,
+                    )));
+      },
+      child: Container(
+        child: Column(children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(0.0, 5, 10.0, 0),
+            constraints: BoxConstraints(maxHeight: 150, maxWidth: 150),
+            child: Image.network(playlistimage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity),
+          ),
+          SizedBox(
+            width: 10,
+            height: 10,
+          ),
+          Text(playlistname)
+        ]),
+      ),
+    );
+  }
+}
+
+class picTextBtn extends StatelessWidget {
+   const picTextBtn(
+      {Key key,
+      this.playlistname,
+      this.playlistimage})
+      : super(key: key);
+  final String playlistname;
+  final String playlistimage;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => songListDetail(
+                      playlistname: playlistname,
+                      playlistimage: playlistimage,
+                    )));
+      },
       child: Container(
         child: Column(children: <Widget>[
           Container(

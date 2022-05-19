@@ -33,8 +33,7 @@ class _songListPageState extends State<songListPage> {
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
     print(data);
-    // formlist = data["data"];
-    // print(formlist);
+     formlist = data["data"];
     listLength = formlist.length;
     // print(formlist[0]['musicname']);
     setState(() {});

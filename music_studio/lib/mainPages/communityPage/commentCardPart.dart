@@ -20,22 +20,22 @@ List commentFormlist = [];
 class commentAllIn extends StatelessWidget {
   commentAllIn({
     Key key,
-    this.pid,
+    this.articleid,
   }) : super(key: key);
-  String pid;
+  String articleid;
   int likes;
   int comments;
   int flag = 0;
   @override
   Widget build(BuildContext context) {
     // getPID();
-    return commentCard(pid: pid);
+    return commentCard(articleid: articleid);
   }
 }
 
 class commentCard extends StatefulWidget {
-  commentCard({Key key, this.pid}) : super(key: key);
-  String pid;
+  commentCard({Key key, this.articleid}) : super(key: key);
+  String articleid;
   @override
   _commentCardState createState() => _commentCardState();
 }
@@ -62,7 +62,8 @@ class _commentCardState extends State<commentCard> {
   getAllComment() async {
     var url = Api.url + '/api/comment/';
     Map<String, dynamic> map1 = Map();
-    map1['articleid'] = '5';
+    print('999999999'+widget.articleid);
+    map1['articleid'] =widget.articleid;
     var dio = Dio();
     var response = await dio.get(url, queryParameters: map1);
     Map<String, dynamic> data = response.data;

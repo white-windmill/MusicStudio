@@ -48,6 +48,7 @@ class _articleListPartState extends State<articleListPart> {
         username: item['articleuserdata']['username'],
         userimage: 'http://124.220.169.238:8000/media/'+item['articleuserdata']['userimage'],
         imageList: tmp,
+        articleid: item['articleid'],
       ));
     }
   }
