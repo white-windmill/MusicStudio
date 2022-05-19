@@ -2,13 +2,79 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:music_studio/assets/myIcons.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 List formlist = [];
+String myid = '';
+
+updatePostLike(String playlistname, String userid) async {
+  var url = Uri.parse(Api.url + '/api/playlist/');
+  var response = await http.post(url,
+      headers: {"content-type": "application/json"},
+      body: '{"playlistname": "' +
+          playlistname +
+          '", "userid": "' +
+          userid +
+          '"}');
+  // print(response.body);
+}
+
+removePostLike(String playlistname, String userid) async {
+  var url = Uri.parse(Api.url + '/api/playlist/');
+  var response = await http.delete(url,
+      headers: {"content-type": "application/json"},
+      body: '{"playlistname": "' +
+          playlistname +
+          '", "userid": "' +
+          userid +
+          '"}');
+  // print(response.body);
+}
+updateSongPostLike(String userid,String playlistname, String musicid,String musicname,String musicsinger,String musicalbum) async {
+  var url = Uri.parse(Api.url + '/api/music/');
+  var response = await http.post(url,
+      headers: {"content-type": "application/json"},
+      body: '{"playlistnameuserid": "' +
+          userid +
+          '", "playlistname": "' +
+         playlistname +
+          '", "musicid": "' +
+         musicid +
+          '", "musicname": "' +
+         musicname +
+         '", "musicsinger": "' +
+         musicsinger +
+         '", "musicalbum": "' +
+         musicalbum +
+          '"}');
+  // print(response.body);
+}
+
+removeSongPostLike(String playlistname, String userid) async {
+  var url = Uri.parse(Api.url + '/api/music/');
+  var response = await http.delete(url,
+      headers: {"content-type": "application/json"},
+      body: '{"playlistname": "' +
+          playlistname +
+          '", "userid": "' +
+          userid +
+          '"}');
+  // print(response.body);
+}
+
+int songListLikeMode = 0;
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  myid = preferences.get('id');
+  // print(myid);
+}
+
 class songListDetail extends StatefulWidget {
   final String playlistname;
   final String playlistimage;
-  songListDetail({Key key, this.playlistname,this.playlistimage}) : super(key: key);
-  int songListLikeMode = 0;
+  songListDetail({Key key, this.playlistname, this.playlistimage})
+      : super(key: key);
 
   @override
   State<songListDetail> createState() => _songListDetailState();
@@ -20,20 +86,40 @@ class _songListDetailState extends State<songListDetail> {
   void initState() {
     //初始化函数、带监听滑动功能
     super.initState();
+    _readShared();
+    getLike();
+
     getInfor();
+  }
+
+  getLike() async {
+    var url = Api.url + '/api/playlist/ret/';
+    Map<String, dynamic> map1 = Map();
+    map1['playlistname'] = widget.playlistname;
+    map1['userid'] = myid;
+    var dio = Dio();
+    var response =
+        await dio.get(url, queryParameters: map1).timeout(Duration(seconds: 3));
+    // print('Response: $response');
+    Map<String, dynamic> data = response.data;
+    songListLikeMode = data["ret"];
+    int like = data["ret"];
+
+    print("当前状态"+like.toString());
   }
 
   getInfor() async {
     var url = Api.url + '/api/playlist/';
     Map<String, dynamic> map = Map();
     map['playlistname'] = widget.playlistname;
+    // print(widget.playlistname + '111111');
     var dio = Dio();
     var response =
         await dio.get(url, queryParameters: map).timeout(Duration(seconds: 3));
     // print('Response: $response');
     Map<String, dynamic> data = response.data;
     // print(data);
-    formlist=data["data"];
+    formlist = data["data"];
     // print(formlist);
   }
 
@@ -59,16 +145,16 @@ class _songListDetailState extends State<songListDetail> {
           child: Column(
             children: <Widget>[
               Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                  height: 200,
-                  width: double.infinity,
-                  child: Image.network(widget.playlistimage,
-                fit: BoxFit.cover,
+                decoration: new BoxDecoration(
+                  color: Colors.grey,
+                ),
+                height: 200,
                 width: double.infinity,
-                height: double.infinity),
-                  ),
+                child: Image.network(widget.playlistimage,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity),
+              ),
               Container(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,10 +171,10 @@ class _songListDetailState extends State<songListDetail> {
                             style: TextStyle(fontSize: 15, color: Colors.grey),
                           )),
                           IconButton(
-                              color: widget.songListLikeMode == 1
+                              color: songListLikeMode == 1
                                   ? Colors.red[700]
                                   : Colors.black,
-                              icon: widget.songListLikeMode == 1
+                              icon: songListLikeMode == 1
                                   ? Icon(MyIcons.followFont, size: 28)
                                   : Icon(MyIcons.followFont),
                               onPressed: () {
@@ -101,12 +187,11 @@ class _songListDetailState extends State<songListDetail> {
                     ),
                     buildGrid(context),
                     songListItem(
-                       musicname: formlist[0]['musicname'],
+                      musicname: formlist[0]['musicname'],
                       musicalbum: formlist[0]['musicalbum'],
                       musicid: formlist[0]['musicid'].toString(),
                       musicsinger: formlist[0]['musicsinger'],
                     ),
-                   
                   ]))
             ],
           ),
@@ -124,14 +209,16 @@ class _songListDetailState extends State<songListDetail> {
     Widget continueButton = FlatButton(
       child: Text("确定"),
       onPressed: () {
-        if (widget.songListLikeMode == 0)
-          //insertFollow(widget.uid, int.parse(UID))
+        if (songListLikeMode == 0) {
+          updatePostLike(widget.playlistname, myid);
           print("insert");
-        else
-          // deleteFollow(widget.uid, int.parse(UID));
+        } else {
+          removePostLike(widget.playlistname, myid);
           print('delect');
+        }
+
         setState(() {
-          widget.songListLikeMode = 1 - widget.songListLikeMode;
+          songListLikeMode = 1 - songListLikeMode;
         });
         Navigator.of(context).pop();
       },
@@ -152,7 +239,7 @@ class _songListDetailState extends State<songListDetail> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        if (widget.songListLikeMode == 0)
+        if (songListLikeMode == 0)
           return alert;
         else
           return alert2;
@@ -164,13 +251,13 @@ class _songListDetailState extends State<songListDetail> {
 class songListItem extends StatefulWidget {
   songListItem({
     Key key,
-    this. musicname,
+    this.musicname,
     this.musicalbum,
     this.musicid,
     this.musicsinger,
     this.followMode = 0,
   }) : super(key: key);
-  final String  musicname;
+  final String musicname;
   final String musicalbum;
   final String musicid;
   final String musicsinger;
@@ -197,7 +284,7 @@ class _songListItemState extends State<songListItem> {
               Container(
                 padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
                 child: Text(
-                  widget. musicname + "",
+                  widget.musicname + "",
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -242,10 +329,10 @@ class _songListItemState extends State<songListItem> {
       onPressed: () {
         if (widget.followMode == 0)
           //insertFollow(widget.uid, int.parse(UID))
-          print("insert");
+          print("insertSong");
         else
           // deleteFollow(widget.uid, int.parse(UID));
-          print('delect');
+          print('delectSong');
         setState(() {
           widget.followMode = 1 - widget.followMode;
         });
@@ -276,6 +363,7 @@ class _songListItemState extends State<songListItem> {
     );
   }
 }
+
 Widget buildGrid(BuildContext context) {
   List<Widget> tiles = [];
   Widget content;
@@ -283,16 +371,16 @@ Widget buildGrid(BuildContext context) {
   for (var item in formlist) {
     count++;
     tiles.add(InkWell(
-        onTap: () {
-          print("click me");
-        },
-        child: songListItem(
-                       musicname: item['musicname'],
-                      musicalbum: item['musicalbum'],
-                      musicid: item['musicid'].toString(),
-                      musicsinger: item['musicsinger'],
-                    ),
-        ));
+      onTap: () {
+        print("click me");
+      },
+      child: songListItem(
+        musicname: item['musicname'],
+        musicalbum: item['musicalbum'],
+        musicid: item['musicid'].toString(),
+        musicsinger: item['musicsinger'],
+      ),
+    ));
   }
   content = new Column(
     children: tiles,

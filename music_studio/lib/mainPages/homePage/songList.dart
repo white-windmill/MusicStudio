@@ -22,9 +22,9 @@ class _songListState extends State<songList> {
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
     rankFormlist = data["data"];
-    print(rankFormlist);
+    // print(rankFormlist);
     listLength = rankFormlist.length;
-    print(rankFormlist[0]['musicname']);
+    // print(rankFormlist[0]['musicname']);
 
     setState(() {});
   }

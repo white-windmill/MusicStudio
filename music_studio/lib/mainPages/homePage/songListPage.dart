@@ -32,7 +32,8 @@ class _songListPageState extends State<songListPage> {
       headers: {"content-type": "application/json"},
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
-    formlist = data["data"];
+    print(data);
+    // formlist = data["data"];
     // print(formlist);
     listLength = formlist.length;
     // print(formlist[0]['musicname']);

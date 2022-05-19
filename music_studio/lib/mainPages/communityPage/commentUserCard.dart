@@ -5,18 +5,12 @@ import 'package:flutter/material.dart';
 class commentUserCard extends StatelessWidget {
   commentUserCard(
       {Key key,
-      this.pid,
-      this.cid,
-      this.uid,
       this.text,
       this.time,
       this.touxiang,
       this.username})
       : super(key: key);
 
-  int pid;
-  int cid;
-  int uid;
   String text;
   String time;
   String touxiang;
@@ -47,8 +41,8 @@ class commentUserCard extends StatelessWidget {
                       child: CircleAvatar(
                           radius: 30,
                           backgroundImage:
-                              // NetworkImage(touxiang),
-                              AssetImage("lib/assets/rotationChart/rotation1.jpg"),
+                              NetworkImage(touxiang),
+                              // AssetImage("lib/assets/rotationChart/rotation1.jpg"),
                           child: Container(
                               padding: EdgeInsets.only(left: 10),
                               alignment: Alignment.center,
@@ -64,7 +58,7 @@ class commentUserCard extends StatelessWidget {
                       child: new Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                        Text('username',
+                        Text(username,
                             style: TextStyle(
                                 color: Color(0xFF111111),
                                 decorationStyle: TextDecorationStyle.double,
@@ -81,7 +75,7 @@ class commentUserCard extends StatelessWidget {
                 body: Container(
                     padding: EdgeInsets.only(left: 10, top: 20, right: 10),
                     child: new Column(children: [
-                      Text('text',
+                      Text(text,
                           style: TextStyle(
                               color: Color(0xFF111111),
                               decorationStyle: TextDecorationStyle.double,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:music_studio/assets/myIcons.dart';
+import 'package:music_studio/mainPages/communityPage/commentCardPart.dart';
 import 'package:music_studio/mainPages/communityPage/commentUserCard.dart';
 
 class postCardPage extends StatefulWidget {
@@ -42,14 +43,28 @@ class postCardPage extends StatefulWidget {
 }
 
 class _postCardPageState extends State<postCardPage> {
-   List<Widget> widgetList = [];
+  List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
-      widgetList.clear();
-    for (int i = 0; i < widget.imageList.length; ++i) {
-      widgetList.add(Image(
-          image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
+    // widgetList.clear();
+    // for (int i = 0; i < widget.imageList.length; ++i) {
+    //   widgetList.add(Image(
+    //       image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
+    // }
+    commentArea(String pid)  {
+      RenderBox renderBox = context.findRenderObject();
+      var screenSize = renderBox.size;
+      final option = showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (context, state) {
+              return  commentAllIn(
+                pid: widget.pid.toString(),
+              );
+            });
+          });
     }
+
     return Padding(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: Container(
@@ -75,8 +90,7 @@ class _postCardPageState extends State<postCardPage> {
                             margin: EdgeInsets.only(top: 5, bottom: 5, left: 5),
                             child: CircleAvatar(
                                 radius: 30,
-                                backgroundImage: NetworkImage(
-                                    widget.userimage),
+                                backgroundImage: NetworkImage(widget.userimage),
                                 child: Container(
                                     padding: EdgeInsets.only(left: 10),
                                     alignment: Alignment.center,
@@ -217,9 +231,7 @@ class _postCardPageState extends State<postCardPage> {
                                               });
                                             }
                                           }),
-                                      Text(
-                                          '${widget.articlelike}',
-                                          
+                                      Text('${widget.articlelike}',
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
@@ -238,10 +250,11 @@ class _postCardPageState extends State<postCardPage> {
                                       IconButton(
                                           icon: Icon(Icons.chat),
                                           onPressed: () {
-                                             Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => commentUserCard()));
+                                            //                          Navigator.of(context).push(
+                                            // MaterialPageRoute(builder: (context) => commentUserCard()));
+                                            commentArea('5');
                                           }),
-                                      Text('${widget.articlecomment}',
+                                      Text('${widget.articlecomment}', //评论
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
@@ -258,9 +271,7 @@ class _postCardPageState extends State<postCardPage> {
                                     SizedBox(width: 40),
                                     new Row(children: [
                                       IconButton(
-                                          onPressed: () {
-                                            
-                                          },
+                                          onPressed: () {},
                                           icon: Icon(Icons.launch)),
                                       Text('6',
                                           style: TextStyle(
