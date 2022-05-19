@@ -7,22 +7,21 @@ import 'utils/http_util.dart';
 
 
 class GetMusic {
-  static const URL_ROOT = '127.0.0.1:3000';
+  static const URL_ROOT = 'http://192.168.43.204:3000';
   static const URL_TOP_SONGS = '$URL_ROOT/top/list?idx=';
   static const URL_SONG_DETAIL = '$URL_ROOT/song/detail?ids=';
   static const URL_GET_LYRIC = '$URL_ROOT/lyric?id=';
-
+  static const URL_SEARCH = '$URL_ROOT/search?keywords=';
   static const URL_GET_TOPLIST =
       '$URL_ROOT/toplist/detail'; // 获取排行和摘要，或者/toplist
 
   static const URL_TOP_ARTISTS = '$URL_ROOT/toplist/artist';
   static const URL_ARTIST_DETAIL = '$URL_ROOT/artists?id=';
 
-    static Future<List> search(String keywords) async {
+  static Future<List> search(String keywords) async {
     var data =
-        await HttpUtil.getJsonData('https://pd.musicapp.migu.cn/MIGUM3.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text=$keywords&pageNo=1&pageSize=10&searchSwitch={"song":1,"album":0,"singer":0,"tagSong":0,"mvSong":0,"songlist":0,"bestShow":1}', useCache: false);
-    List songList = data['songResultData']['result'];
-    print(songList);
+        await HttpUtil.getJsonData('$URL_SEARCH$keywords', useCache: false);
+    List songList = data['result']['songs'];
     return songList;
   }
     // 获取歌词
@@ -57,5 +56,46 @@ class GetMusic {
       print('$e');
       return null;
     }
+  }
+    static Future<List> getSongDetails(String ids) async {
+    var data =
+        await HttpUtil.getJsonData('$URL_SONG_DETAIL$ids', useCache: false);
+    List songList = data['songs'];
+    return songList;
+  }
+  static Future<Map> getSongDetail(String id) async {
+    List songList = await getSongDetails(id);
+    Map song;
+    if (songList.length > 0) {
+      song = songList[0];
+    }
+    return song;
+  }
+    static Future<List> getTopSongs(int listId) async {
+    print('$URL_TOP_SONGS$listId');
+    var data = await HttpUtil.getJsonData('$URL_TOP_SONGS$listId');
+    List songList = data['playlist']['tracks'];
+    return songList;
+  }
+    static Future<List> getArtistList() async {
+      print(URL_TOP_ARTISTS);
+    var data = await HttpUtil.getJsonData(URL_TOP_ARTISTS);
+    print(data);
+    List songList = data['list']['artists'];
+    
+    
+    return songList;
+  }
+    static Future<Map> getArtistDetail(int id) async {
+    Map detail = await HttpUtil.getJsonData('$URL_ARTIST_DETAIL$id');
+    Map artist = detail['artist'];
+    Map content = {
+      'id': artist['id'],
+      'name': artist['name'],
+      'desc': artist['briefDesc'],
+      'image': artist['picUrl'],
+      'songs': detail['hotSongs'],
+    };
+    return content;
   }
 }

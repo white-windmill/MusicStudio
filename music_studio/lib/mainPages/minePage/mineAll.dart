@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/player_page.dart';
 
 
 
@@ -61,7 +62,8 @@ class _minePageState extends State<minePage> {
                   InkWell(
                     onTap: () {
                       print("已点击");
-                     
+                      Navigator.pushNamed(context, '/rank');
+                      
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

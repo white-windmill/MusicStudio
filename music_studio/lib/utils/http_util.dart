@@ -18,6 +18,8 @@ class HttpUtil {
       if (cache != null) {
         try {
           data = jsonDecode(cache);
+          print(data);
+          print('bbbbbbbbbbbbb');
         } catch (e) {
           APICache.deleteCache(url);
           print(e);
@@ -35,6 +37,8 @@ class HttpUtil {
 
       try {
         Response response = await Dio(options).get(url);
+        print(response);
+        print("aaaaaaaa");
         if (response.statusCode == HttpStatus.ok) {
           var text = response.data;
           data = jsonDecode(text);
