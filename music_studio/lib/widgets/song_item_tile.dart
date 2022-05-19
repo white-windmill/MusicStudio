@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:music_studio/player_page.dart';
 import 'package:music_studio/utils/song_util.dart';
 
+
+
+//歌单内容用这个组件
+
 class SongItemTile extends StatelessWidget {
   final List songList;
   final int index;
@@ -48,6 +52,8 @@ class SongItemTile extends StatelessWidget {
             if (onItemTap != null) {
               this.onItemTap();
             }
+            print('跳转至音乐播放界面');
+            print(songList);
             PlayerPage.gotoPlayer(context, list: songList, index: index);
           },
         ));

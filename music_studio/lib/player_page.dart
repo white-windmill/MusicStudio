@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,9 +23,13 @@ class PlayerPage extends StatefulWidget {
   // 外部跳转统一经过这儿
   static void gotoPlayer(BuildContext context, {List list, int index}) {
     if (list != null) {
-      Provider.of<MusicController>(context,listen: false).setPlayList(list, index);
+      Provider.of<MusicController>(context, listen: false)
+          .setPlayList(list, index);
     }
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayerPage._()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return PlayerPage._();
+    }));
   }
 
   _PlayerPageState createState() => _PlayerPageState();
@@ -50,13 +56,17 @@ class _PlayerPageState extends State<PlayerPage>
   @override
   void initState() {
     super.initState();
-    _animController =
+    Future.delayed(Duration.zero, () {
+      _animController =
         AnimationController(duration: const Duration(seconds: 24), vsync: this);
     _animController.addStatusListener((status) {
       print("RotationTransition: $status");
     });
-
+    ScreenSize.getScreenSize(context);
+    print(ScreenSize.height);
     imageSize = ScreenSize.height ~/ 3;
+
+    print(imageSize);
     if (imageSize == 0) {
       imageSize = 250;
     }
@@ -67,6 +77,9 @@ class _PlayerPageState extends State<PlayerPage>
     initMusicListener();
 
     musicController.startSong();
+    //执行代码写在这里
+    });
+    
   }
 
   _onStartLoading() {
@@ -75,7 +88,7 @@ class _PlayerPageState extends State<PlayerPage>
     songImage = SongUtil.getSongImage(song, size: imageSize);
     artistNames = SongUtil.getArtistNames(song);
 
-    print("StartSong: ${song['name']}, imageSize: $imageSize");
+    print("StartSong: ${song['name']}， imageSize: $imageSize");
 
     if (songImage == null || songImage.isEmpty) {
       GetMusic.getSongDetail(song['id'].toString()).then((songDetail) {
@@ -86,7 +99,6 @@ class _PlayerPageState extends State<PlayerPage>
           });
           song['imageUrl'] = SongUtil.getSongImage(songDetail, size: 0);
           print('getSongDetail: $songImage');
-          // FavoriteDB().updateFavorite(song);
         }
       });
     }
@@ -138,7 +150,7 @@ class _PlayerPageState extends State<PlayerPage>
     });
     print("AudioPlayer onError: $msg");
 
-    Fluttertoast.showToast(msg: "歌曲播放失败！");
+    Fluttertoast.showToast(msg: "歌曲播放失败");
   }
 
   @override
@@ -156,30 +168,30 @@ class _PlayerPageState extends State<PlayerPage>
 
   Widget _buildTitle() {
     return ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
         ),
-        title: Text(
-          song['name'],
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-        subtitle: Text(
-          artistNames,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 14.0, color: Colors.white60),
-        ),
-        // trailing: FavoriteIcon(song) // 收藏按钮
-        );
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text(
+        song['name'],
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 16.0, color: Colors.white),
+      ),
+      subtitle: Text(
+        artistNames,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14.0, color: Colors.white60),
+      ),
+      // trailing: FavoriteIcon(song) // 收藏按钮
+    );
   }
 
   Widget _getSongImage(BoxFit fit) {
@@ -204,15 +216,16 @@ class _PlayerPageState extends State<PlayerPage>
   }
 
   Widget _buildCDCover() {
-    return IgnorePointer(child:Container(
-        width: imageSize.toDouble()+24,
-        height: imageSize.toDouble()+24,
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 8,
-              color: Colors.black.withOpacity(0.4),
-            ),
-            shape: BoxShape.circle)));
+    return IgnorePointer(
+        child: Container(
+            width: imageSize.toDouble() + 24,
+            height: imageSize.toDouble() + 24,
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 8,
+                  color: Colors.black.withOpacity(0.4),
+                ),
+                shape: BoxShape.circle)));
   }
 
   Widget _buildProgressIndicator() {
@@ -221,7 +234,7 @@ class _PlayerPageState extends State<PlayerPage>
             width: imageSize.toDouble() + 10.0,
             height: imageSize.toDouble() + 10.0,
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.red),
+              valueColor: AlwaysStoppedAnimation(Colors.white),
               strokeWidth: 2.0,
             ))
         : SizedBox(width: 0.0);
@@ -246,13 +259,13 @@ class _PlayerPageState extends State<PlayerPage>
                             : musicController.play()
                       },
                   child: Hero(
-                      tag: 'FloatingPlayer',
-                      //child: ClipOval(child: _getSongImage(BoxFit.cover))
-                      // 加边框的效果
-                      child:ClipOval(child: _getSongImage(BoxFit.cover)),
-                      )),
+                    tag: 'FloatingPlayer',
+                    //child: ClipOval(child: _getSongImage(BoxFit.cover))
+                    // 加边框的效果
+                    child: ClipOval(child: _getSongImage(BoxFit.cover)),
+                  )),
             ),
-            _buildCDCover(),  // cd控件会挡住点击事件
+            _buildCDCover(), // cd控件会挡住点击事件
             _buildProgressIndicator(),
           ],
         ));
@@ -289,7 +302,7 @@ class _PlayerPageState extends State<PlayerPage>
     // 循环方式
     CycleType cycleType = musicController.playList.cycleType;
     return Container(
-        padding: EdgeInsets.only(top:8.0, bottom:24.0),
+        padding: EdgeInsets.only(top: 8.0, bottom: 24.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -303,7 +316,9 @@ class _PlayerPageState extends State<PlayerPage>
               size: 30,
               onPressed: () {
                 musicController.playList.changCycleType();
-                    Fluttertoast.showToast(msg: musicController.playList.getCycleName());
+
+                Fluttertoast.showToast(
+                    msg: musicController.playList.getCycleName());
                 setState(() {});
               },
             ),
@@ -379,9 +394,9 @@ class _PlayerPageState extends State<PlayerPage>
             child: _getSongImage(BoxFit.fill),
           ),
           // 高斯模糊遮罩层
-          // BackdropFilter(
-            // filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
-            Opacity(
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
+            child: Opacity(
               opacity: 0.6,
               child: new Container(
                 decoration: new BoxDecoration(
@@ -389,7 +404,7 @@ class _PlayerPageState extends State<PlayerPage>
                 ),
               ),
             ),
-          // ),
+          ),
           SafeArea(
               child: Column(
             children: <Widget>[

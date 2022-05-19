@@ -40,7 +40,7 @@ class FileUtil{
     return filePath;
   }
 
-    /// 获取收藏歌曲歌词
+    /// 获取歌曲歌词
   static Future<String> getLyricLocalPath(int songId) async {
     String dir = await getSubDirPath(lyricDir);
     String fileName = '$songId.lyric';

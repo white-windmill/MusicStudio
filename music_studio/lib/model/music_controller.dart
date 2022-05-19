@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:music_studio/model/play_list.dart';
+import 'package:music_studio/utils/song_util.dart';
 
 enum PlayerState { loading, playing, paused, stopped, completed }
 
@@ -60,7 +61,7 @@ class MusicController with ChangeNotifier {
 
   void init() {
     audioPlayer = new AudioPlayer();
-    // playList = PlayList();
+    playList = PlayList();
 
     _positionSubscription = audioPlayer.onAudioPositionChanged.listen((p) {
       position = p.inMilliseconds;
@@ -132,9 +133,9 @@ class MusicController with ChangeNotifier {
     if (isContinue) {
       play(path: this.url);
     } else {  // 如果是播放新歌，就重新获取播放地址。
-      // SongUtil.getPlayPath(song).then((playPath) {
-      // play(path: playPath);
-    // });
+      SongUtil.getPlayPath(song).then((playPath) {
+      play(path: playPath);
+    });
     }
     
   }
@@ -207,7 +208,6 @@ class MusicController with ChangeNotifier {
   }
 
   Map previous() {
-
     Map item;
     if (playList.cycleType == CycleType.random) {
       item = playList.randomNext();
@@ -252,6 +252,5 @@ class MusicController with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
 }

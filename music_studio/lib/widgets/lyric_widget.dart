@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:music_studio/GetMusic.dart';
 import 'package:music_studio/model/Lyric.dart';
 import 'package:music_studio/utils/screen_size.dart';
-import 'package:music_studio/utils/shared_preference_util.dart';
-
 class LyricPage extends StatefulWidget {
   _LyricPageState _state;
 
@@ -72,8 +70,8 @@ class _LyricPageState extends State<LyricPage> {
 
     visibleItemSize = ScreenSize.height < 700 ? 5 : 7;
     _controller = ScrollController();
-
-    islyricMask = SharedPreferenceUtil.getInstance().get('lyricMask') ?? true;
+    islyricMask = true;
+    // islyricMask = SharedPreferenceUtil.getInstance().get('lyricMask') ?? true;
 
     print('LyricPage initState, 歌词可见行数：$visibleItemSize');
   }
@@ -358,8 +356,10 @@ class _GradientTextState extends State<GradientText> {
 
     // ColorStyleProvider colorProvider = Provider.of<ColorStyleProvider>(context);
     final Gradient gradient = LinearGradient(
+
+      
         // colors: [colorProvider.getLightColor(), widget.colorBg],
-        stops: [0.5, 0.65], colors: [Colors.black]); // 设置渐变的起始位置
+        stops: [0.5, 0.65], colors: [Colors.black,widget.colorBg]); // 设置渐变的起始位置
 
     /// 参考：https://juejin.im/post/5c860c0a6fb9a049e702ef39
     return ShaderMask(
