@@ -1,4 +1,6 @@
 
+import 'file_util.dart';
+
 class SongUtil {
   static String getArtistNames(Map song) {
     if (song.containsKey('artistNames')) {
@@ -76,14 +78,14 @@ class SongUtil {
   }
 
 
-  // static Future<String> getPlayPath(Map song) async{
-  //   String localPath = await FileUtil.getSongLocalPath(song['id']);
-  //   if (await FileUtil.isFileExists(localPath)) {
-  //     return localPath;
-  //   } else {
-  //     return getSongUrl(song);
-  //   }
-  // }
+  static Future<String> getPlayPath(Map song) async{
+    String localPath = await FileUtil.getSongLocalPath(song['id']);
+    if (await FileUtil.isFileExists(localPath)) {
+      return localPath;
+    } else {
+      return getSongUrl(song);
+    }
+  }
 
   
   // static Future<bool> isSongDownloaded(int id) async{

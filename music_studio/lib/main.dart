@@ -8,14 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'loginPage/sign_up.dart';
 import 'loginPage/login.dart';
 import 'mainPages/communityPage/communityAll.dart';
-import 'mainPages/homePage/artist_list_page.dart';
 import 'mainPages/homePage/homeAll.dart';
 import 'mainPages/minePage/mineAll.dart';
 import 'mainPages/minePage/modify_information.dart';
 import 'mainPages/minePage/mysong.dart';
 import 'mainPages/minePage/mysongsheet.dart';
 import 'model/music_controller.dart';
-import 'testpage.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
     runApp(_buildProvider());
@@ -67,8 +65,7 @@ class Router extends StatelessWidget {
     '/my_song':(context) => MySong(),
     '/my_songsheet':(context) => MySongSheet(),
     '/modify':(context) => ModifyInformation(),
-    '/rank':(context) => ArtistListPage(),
-    '/t':(context) => TestPage(),
+    '/rank':(context) => RankPage(),
     
 
   };
