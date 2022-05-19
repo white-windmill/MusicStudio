@@ -15,7 +15,7 @@ class _RankSongListState extends State<RankSongList> {
   List _songs = List();
 
   _getSongs() async {
-    await GetMusic.getTopSongs(6606027462).then((result) {
+    await GetMusic.getTopSongs(widget.topId).then((result) {
       // 界面未加载，返回。
       if (!mounted) return;
 
