@@ -42,11 +42,11 @@ class _postCardPageState extends State<postCardPage> {
   List<Widget> widgetList = [];
   @override
   Widget build(BuildContext context) {
-    // widgetList.clear();
-    // for (int i = 0; i < widget.imageList.length; ++i) {
-    //   widgetList.add(Image(
-    //       image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
-    // }
+    widgetList.clear();
+    for (int i = 0; i < widget.imageList.length; ++i) {
+      widgetList.add(Image(
+          image: NetworkImage(widget.imageList[i]), height: 70, width: 70));
+    }
     commentArea(String pid) {
       RenderBox renderBox = context.findRenderObject();
       var screenSize = renderBox.size;
