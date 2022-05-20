@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/mainPages/homePage/rank_song_list.dart';
 import 'package:music_studio/mainPages/homePage/songList.dart';
 import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
 import 'package:http/http.dart' as http;
@@ -146,13 +147,16 @@ class picTextBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => songListDetail(
-                      playlistname: playlistname,
-                      playlistimage: playlistimage,
-                    )));
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+          return RankSongList(6606027462, playlistname);
+        }));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => RankSongList(
+        //               playlistname: playlistname,
+        //               playlistimage: playlistimage,
+        //             )));
       },
       child: Container(
         child: Column(children: <Widget>[

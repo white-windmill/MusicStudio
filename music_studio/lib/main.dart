@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:music_studio/bottom.dart';
 import 'package:music_studio/loginPage/forget_password.dart';
 import 'package:music_studio/loginPage/sign_up.dart';
-import 'package:music_studio/mainPages/homePage/rank_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loginPage/sign_up.dart';
@@ -65,7 +64,6 @@ class Router extends StatelessWidget {
     '/my_song':(context) => MySong(),
     '/my_songsheet':(context) => MySongSheet(),
     '/modify':(context) => ModifyInformation(),
-    '/rank':(context) => RankPage(),
     
 
   };
@@ -73,8 +71,8 @@ class Router extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // initialRoute: '/login',
-      initialRoute: '/bottom',
+      initialRoute: '/login',
+      // initialRoute: '/bottom',
 
       //routes: routes,
       onGenerateRoute: (RouteSettings settings) {

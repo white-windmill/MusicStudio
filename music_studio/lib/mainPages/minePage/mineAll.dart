@@ -62,7 +62,7 @@ class _minePageState extends State<minePage> {
                   InkWell(
                     onTap: () {
                       print("已点击");
-                      Navigator.pushNamed(context, '/rank');
+                      Navigator.pushNamed(context, '/modify');
                       
                     },
                     child: Row(
@@ -239,7 +239,7 @@ class _minePageState extends State<minePage> {
                               ),
                             ),
                             MenuItem(
-                              title: '巴拉巴拉',
+                              title: '猜你想听',
                             ),
                           ],
                         ),

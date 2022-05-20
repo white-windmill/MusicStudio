@@ -63,7 +63,7 @@ class _commentCardState extends State<commentCard> {
     var url = Api.url + '/api/comment/';
     Map<String, dynamic> map1 = Map();
     print('999999999'+widget.articleid);
-    map1['articleid'] =widget.articleid;
+    map1['articleid'] ='5';
     var dio = Dio();
     var response = await dio.get(url, queryParameters: map1);
     Map<String, dynamic> data = response.data;
