@@ -35,12 +35,9 @@ class searchMessage extends StatelessWidget {
                   icon: Icon(Icons.search),
                   onPressed: () {
                     word = searchController.text;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => searchResultPage(
-                                  searchWord: word,
-                                )));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+          return SearchResultPage(word);
+        }));
                   },
                 ), ),
                   
