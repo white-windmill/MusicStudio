@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:music_studio/assets/myIcons.dart';
+import 'package:music_studio/common/api.dart';
 import 'package:music_studio/mainPages/communityPage/commentCardPart.dart';
-import 'package:music_studio/mainPages/communityPage/commentUserCard.dart';
+import 'package:http/http.dart' as http;
 
 class postCardPage extends StatefulWidget {
   postCardPage(
@@ -40,6 +41,22 @@ class postCardPage extends StatefulWidget {
 
 class _postCardPageState extends State<postCardPage> {
   List<Widget> widgetList = [];
+
+  updatePostLikeCommShare(String articleid) async {
+    var url = Uri.parse(Api.url + '/api/article/');
+    print(articleid);
+    var response = await http.put(url,
+        headers: {"content-type": "application/json"},
+        body: '{"articleid": "${articleid}"' + '}');
+  }
+   delUpdatePostLikeCommShare(String articleid) async {
+    var url = Uri.parse(Api.url + '/api/article/del/');
+    print(articleid);
+    var response = await http.put(url,
+        headers: {"content-type": "application/json"},
+        body: '{"articleid": "${articleid}"' + '}');
+  }
+
   @override
   Widget build(BuildContext context) {
     widgetList.clear();
@@ -206,23 +223,17 @@ class _postCardPageState extends State<postCardPage> {
                                           onPressed: () {
                                             //print(widget.likeMode.toString()+"11111111111");
                                             if (widget.likeMode == 0) {
-                                              // updatePostLikeCommShare(
-                                              //     widget.pid,
-                                              //     widget.likes + 1,
-                                              //     widget.comments,
-                                              //     widget.forwards);
+                                              updatePostLikeCommShare(
+                                                  widget.articleid);
                                               setState(() {
-                                                //widget.likes += 1;
+                                                widget.articlelike += 1;
                                                 widget.likeMode = 1;
                                               });
                                             } else {
-                                              // updatePostLikeCommShare(
-                                              //     widget.pid,
-                                              //     widget.likes - 1,
-                                              //     widget.comments,
-                                              //     widget.forwards);
+                                              delUpdatePostLikeCommShare(
+                                                  widget.articleid);
                                               setState(() {
-                                                // widget.likes -= 1;
+                                                widget.articlelike -= 1;
                                                 widget.likeMode = 0;
                                               });
                                             }
