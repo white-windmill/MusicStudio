@@ -1,14 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:music_studio/mainPages/homePage/searchResultPage.dart';
 
+final TextEditingController searchController = new TextEditingController();
 
+String word = searchController.text;
 
 class searchMessage extends StatelessWidget {
-  Widget buildTextField() {
+  Widget buildTextField(BuildContext context) {
     return Theme(
         data: ThemeData(primaryColor: Colors.grey),
         child: new TextField(
+            controller: searchController,
             cursorColor: Color.fromARGB(255, 176, 210, 176),
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(top: 0, bottom: 0),
@@ -24,7 +27,24 @@ class searchMessage extends StatelessWidget {
                 focusedBorder: OutlineInputBorder(
                     borderSide:
                         BorderSide(color: Color.fromARGB(255, 176, 210, 176))),
-                icon: Icon(Icons.search),
+                icon:
+                SizedBox(width: 10,
+                  child: IconButton(
+                    
+    padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    word = searchController.text;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => searchResultPage(
+                                  searchWord: word,
+                                )));
+                  },
+                ), ),
+                  
+                
                 hintText: "搜索",
                 hintStyle: new TextStyle(
                     fontSize: 13,
@@ -42,6 +62,7 @@ class searchMessage extends StatelessWidget {
             alignment: Alignment.center,
             height: 20,
             padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            child: buildTextField()));
+            child: buildTextField(context)));
   }
 }
+

@@ -1,14 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class commentUserCard extends StatelessWidget {
-  commentUserCard(
-      {Key key,
-      this.text,
-      this.time,
-      this.touxiang,
-      this.username})
+  commentUserCard({Key key, this.text, this.time, this.touxiang, this.username})
       : super(key: key);
 
   String text;
@@ -40,9 +34,8 @@ class commentUserCard extends StatelessWidget {
                   leading: InkWell(
                       child: CircleAvatar(
                           radius: 30,
-                          backgroundImage:
-                              NetworkImage(touxiang),
-                              // AssetImage("lib/assets/rotationChart/rotation1.jpg"),
+                          backgroundImage: NetworkImage(touxiang),
+                          // AssetImage("lib/assets/rotationChart/rotation1.jpg"),
                           child: Container(
                               padding: EdgeInsets.only(left: 10),
                               alignment: Alignment.center,
@@ -93,23 +86,6 @@ class commentUserCard extends StatelessWidget {
                     ])),
                 bottomNavigationBar: Padding(
                     padding: EdgeInsets.only(bottom: 8),
-                    child: Text('time', style: TextStyle(fontSize: 10))))));
-
-    // ListTile(
-    //     leading: Padding(
-    //         padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
-    //         child: Image(image: AssetImage('lib/assets/images/xj1.jpg'))),
-    //     title: SizedBox(
-    //         height: 100,
-    //         child: new Row(
-    //           children: [
-    //             Text('hello'),
-    //             SizedBox(width: 100),
-    //             new Column(children: [
-    //               SizedBox(height: 60),
-    //               Text('2021-11-05', style: TextStyle(fontSize: 10))
-    //             ])
-    //           ],
-    //         )));
+                    child: Text(time, style: TextStyle(fontSize: 10))))));
   }
 }

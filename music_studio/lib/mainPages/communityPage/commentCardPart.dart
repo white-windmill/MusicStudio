@@ -52,7 +52,7 @@ class _commentCardState extends State<commentCard> {
           // uid: item['uid'],
           // cid: item['cid'],
           text: item['commentcontent'].toString(),
-          // time: item['time'].toString(),
+          time: item['commenttime'].toString().substring(5,10)+' '+item['commenttime'].toString().substring(11,16),
           touxiang: 'http://124.220.169.238:8000/media/' +
               item['userdata']['userimage'].toString(),
           username: item['userdata']['username'].toString()));
@@ -62,13 +62,13 @@ class _commentCardState extends State<commentCard> {
   getAllComment() async {
     var url = Api.url + '/api/comment/';
     Map<String, dynamic> map1 = Map();
-    print('999999999'+widget.articleid);
-    map1['articleid'] ='5';
+    print('999999999' + widget.articleid);
+    map1['articleid'] = '5';
     var dio = Dio();
     var response = await dio.get(url, queryParameters: map1);
     Map<String, dynamic> data = response.data;
     commentFormlist = data["data"][0]['comment'];
-    print(data["data"][0]['comment'][0]['userdata']['username']);
+    print(data["data"][0]['comment'][0]);
   }
 
   @override

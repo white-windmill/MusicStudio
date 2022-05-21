@@ -9,13 +9,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_studio/common/api.dart';
 
 String imagepicList;
 dynamic test;
 DateTime time;
 List aList;
 List<Widget> tiles;
-String UID;
+String TEXT;
+String myid;
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  myid = preferences.get('id');
+  // print(myid);
+}
 
 class addPostCard extends StatefulWidget {
   //addPostCard({Key? key}) : super(key: key);
@@ -25,6 +32,24 @@ class addPostCard extends StatefulWidget {
 }
 
 class _addPostCardState extends State<addPostCard> {
+     void initState() {
+    //初始化函数、带监听滑动功能
+     _readShared();
+    // imageUrl.clear();
+    super.initState();
+  }
+  getInfor(String now) async {
+    var url = Uri.parse(Api.url + '/api/article/');
+    var response = await http.post(url,
+        headers: {"content-type": "application/json"},
+        body: '{"userid": "${myid}", "articlecontent": "${TEXT}",' +
+            '"articletime": "${now}"}');
+
+    // var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
+  
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // getUID();
@@ -63,6 +88,7 @@ class _addPostCardState extends State<addPostCard> {
                             // getTAG();
                             // print(TAG);
                             DateTime now = new DateTime.now();
+                            print(now);
                             // IMGS.clear();
                             // for (int i = 0; i < imageUrl.length; ++i)
                             //   IMGS.add(imageUrl[i].toString());
@@ -72,12 +98,13 @@ class _addPostCardState extends State<addPostCard> {
                             // for (var i in imageUrl) {
                             //   print(i + "  im imageUrl");
                             // }
-                            Navigator.pop(context);
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              // return indexPage(now: 3);
-                            }));
-                            ;
+                            // Navigator.pop(context);
+                            // Navigator.of(context)
+                            //     .push(MaterialPageRoute(builder: (context) {
+                            //   return indexPage(now: 3);
+                            // }
+                            // ));
+                            
                           },
                         )
                       ],
@@ -106,7 +133,7 @@ class _addPostCardState extends State<addPostCard> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15)))),
                               onChanged: (a) {
-                                // TEXT = a;
+                                TEXT = a;
                               })),
                       IconButton(
                           icon: Icon(Icons.photo),
