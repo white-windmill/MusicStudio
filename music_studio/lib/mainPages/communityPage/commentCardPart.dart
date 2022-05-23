@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/mainPages/communityPage/addCommentPart.dart';
 import 'package:music_studio/mainPages/communityPage/commentUserCard.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,7 @@ class _commentCardState extends State<commentCard> {
   getAllComment() async {
     var url = Api.url + '/api/comment/';
     Map<String, dynamic> map1 = Map();
-    print('999999999' + widget.articleid);
+    // print('999999999' + widget.articleid);
     map1['articleid'] = '5';
     var dio = Dio();
     var response = await dio.get(url, queryParameters: map1);
@@ -83,7 +84,14 @@ class _commentCardState extends State<commentCard> {
               IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    print("clicl 2");
+                       setState(() {
+                      Navigator.push(context, new MaterialPageRoute(
+                          builder: (BuildContext context) {
+                        return new addCommentpart(
+                          articleid:widget.articleid
+                            );
+                      }));
+                    });
                   },
                   color: Colors.grey)
             ],
