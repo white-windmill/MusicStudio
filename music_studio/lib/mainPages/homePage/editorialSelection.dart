@@ -22,8 +22,9 @@ class _editorialSelectionState extends State<editorialSelection> {
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-    super.initState();
     getInfor();
+    super.initState();
+    
   }
 
   getInfor() async {
@@ -33,9 +34,14 @@ class _editorialSelectionState extends State<editorialSelection> {
       headers: {"content-type": "application/json"},
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
-    formlist = data["data"];
+    setState(() {
+            formlist = data["data"];
+             listLength = formlist.length;
+        });
+    
+  
     // print(formlist);
-    listLength = formlist.length;
+   
   }
 
   Widget build(BuildContext context) {
