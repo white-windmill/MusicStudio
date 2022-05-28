@@ -29,7 +29,6 @@ class commentAllIn extends StatelessWidget {
   int flag = 0;
   @override
   Widget build(BuildContext context) {
-    // getPID();
     return commentCard(articleid: articleid);
   }
 }
@@ -44,32 +43,30 @@ class commentCard extends StatefulWidget {
 class _commentCardState extends State<commentCard> {
   List<Widget> commentWidgetList = [Divider()];
   void initState() {
-    super.initState();
+    
     getAllComment();
-    for (var item in commentFormlist) {
-      commentWidgetList.add(new commentUserCard(
+  
+    super.initState();
+  }
 
-          // pid: item['pid'],
-          // uid: item['uid'],
-          // cid: item['cid'],
+  getAllComment() async {
+    var url = Api.url + '/api/comment/';
+    Map<String, dynamic> map1 = Map();
+    map1['articleid'] = widget.articleid;
+    var dio = Dio();
+    var response = await dio.get(url, queryParameters: map1);
+    Map<String, dynamic> data = response.data;
+   
+    print(data["data"][0]['comment'][0]);
+    setState(() { commentFormlist = data["data"][0]['comment'];});
+      for (var item in commentFormlist) {
+      commentWidgetList.add(new commentUserCard(
           text: item['commentcontent'].toString(),
           time: item['commenttime'].toString().substring(5,10)+' '+item['commenttime'].toString().substring(11,16),
           touxiang: 'http://124.220.169.238:8000/media/' +
               item['userdata']['userimage'].toString(),
           username: item['userdata']['username'].toString()));
     }
-  }
-
-  getAllComment() async {
-    var url = Api.url + '/api/comment/';
-    Map<String, dynamic> map1 = Map();
-    // print('999999999' + widget.articleid);
-    map1['articleid'] = '5';
-    var dio = Dio();
-    var response = await dio.get(url, queryParameters: map1);
-    Map<String, dynamic> data = response.data;
-    commentFormlist = data["data"][0]['comment'];
-    print(data["data"][0]['comment'][0]);
   }
 
   @override

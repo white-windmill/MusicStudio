@@ -85,11 +85,12 @@ class _songListDetailState extends State<songListDetail> {
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-    super.initState();
+    
     _readShared();
     getLike();
 
     getInfor();
+    super.initState();
   }
 
   getLike() async {
@@ -119,7 +120,11 @@ class _songListDetailState extends State<songListDetail> {
     // print('Response: $response');
     Map<String, dynamic> data = response.data;
     // print(data);
-    formlist = data["data"];
+    setState(() {
+      formlist.clear();
+           formlist = data["data"];
+        });
+   
     // print(formlist);
   }
 
@@ -186,12 +191,7 @@ class _songListDetailState extends State<songListDetail> {
                       height: 5,
                     ),
                     buildGrid(context),
-                    songListItem(
-                      musicname: formlist[0]['musicname'],
-                      musicalbum: formlist[0]['musicalbum'],
-                      musicid: formlist[0]['musicid'].toString(),
-                      musicsinger: formlist[0]['musicsinger'],
-                    ),
+                    
                   ]))
             ],
           ),

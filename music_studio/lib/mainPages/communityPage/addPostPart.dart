@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'dart:io';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:music_studio/mainPages/communityPage/addCommentPart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:music_studio/common/api.dart';
@@ -16,13 +17,43 @@ dynamic test;
 DateTime time;
 List aList;
 List<Widget> tiles;
+// List pickPic=[];
 String TEXT;
-String myid;
+String myid='111';
+List<String> imageUrl = [];
+List<ImageSource> upImgFile=[];
 Future _readShared() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   myid = preferences.get('id');
-  // print(myid);
+  print(myid);
 }
+//  Future<void> selectAssets() async {
+//     final Set<AssetEntity> result = await AssetPicker.pickAssets(
+//       context,
+//       maxAssets: 9,
+//       pathThumbSize: 84,
+//       gridCount: 4,
+//       selectedAssets: assets,
+//     );
+//     if (result != null) {
+//       assets = Set<AssetEntity>.from(result);
+//       print(assets.first);
+//       AssetEntity asset = assets.first;
+//       File file = await asset.file;
+//       print(file.path);
+//     }
+//   }
+// Future _getGalleryImage() async{
+//     final galleryImages = await picker.getImage(source: ImageSource.gallery);
+//     if(mounted){
+//       setState(() {
+//         if(galleryImages!=null){
+//           str2 = galleryImages.path;
+//           print('gallery路径为:${galleryImages.path}');
+//         }
+//       });
+//     }
+// }
 
 class addPostCard extends StatefulWidget {
   //addPostCard({Key? key}) : super(key: key);
@@ -32,27 +63,116 @@ class addPostCard extends StatefulWidget {
 }
 
 class _addPostCardState extends State<addPostCard> {
-     void initState() {
+    List<String> tagTextList = [];
+  List<Widget> tagCardList = [];
+  List<Widget> imageList = [];
+  String nowTag = "";
+  File _image;
+  String tmp = "1";
+  
+  @override
+  void initState() {
     //初始化函数、带监听滑动功能
-     _readShared();
-    // imageUrl.clear();
     super.initState();
+    imageUrl.clear();
+    _readShared();
   }
-  getInfor(String now) async {
-    var url = Uri.parse(Api.url + '/api/article/');
-    var response = await http.post(url,
-        headers: {"content-type": "application/json"},
-        body: '{"userid": "${myid}", "articlecontent": "${TEXT}",' +
-            '"articletime": "${now}"}');
+  Future choosePic(ImageSource source) async {
+    // upImgFile.add(source);
+    print(source);
+    // print(upImgFile[0]);
+    //参数类型为ImageSource
+    //var image = await ImagePicker.pickImage(source: source); //过期方法暂时没有找到合适的替代方法
+    ImagePicker imagePicker = ImagePicker();
+    PickedFile image = await imagePicker.getImage(source: source);
+    print(image.path+'1111111111');
+    print(imageUrl);
+    imageUrl.add(image.path);
+    print(image.runtimeType.toString());
+    //上传
+    // var request = http.MultipartRequest(
+    //     'POST', Uri.parse(Api.url + '/cs1902/post/uploadImage'));
+    // request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    // http.StreamedResponse response = await request.send();
+    // if (response.statusCode == 200) {
+    //   tmp = await response.stream.bytesToString();
+      print(tmp + "的imageurl");
+      // if (tmp.length > 20) {
+      //   Fluttertoast.showToast(
+      //     msg: '添加图片成功',
+      //     gravity: ToastGravity.BOTTOM,
+      //   );
+        setState(() {
+          //将用户照片存储到_image
+          _image = File(image.path);
+          
+          imageList.add(new Container(
+              height: 50,
+              width: 50,
+              child: Image.file(_image),
+              decoration: new BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(2.0, 2.0), //阴影xy轴偏移量
+                        blurRadius: 5.0, //阴影模糊程度
+                        spreadRadius: 1.0 //阴影扩散程度
+                        )
+                  ],
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(150))));
+          // imageUrl.add(tmp);
+          print(tmp + "yesyesyes imageurl");
+        });
+      // } else {
+      //   print("nonononononono imageurl");
+      // }
+    // } else {
+    //   print(response.reasonPhrase);
+    // }
+  }
+  addArticle(String now,String articlecontent,String  source1,String  source2,String source3) async {
+    // var url = Api.url + '/api/article/';
+    // print('myid:'+myid);
+    // print('time:'+now);
+    // print('content:'+articlecontent);
+    // ImagePicker imagePicker = ImagePicker();
+    // PickedFile image = await imagePicker.getImage(source: source1);
+    // var request = http.MultipartRequest(
+    //     'POST', Uri.parse(url,
+    //     headers: {"content-type": "application/json"},
+    //     body: '{"userid": "${myid}", "articlecontent": "${TEXT}",' +
+    //         '"articletime": "${now}"}'));
+    // request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    // http.StreamedResponse response = await request.send();
+ var url = Api.url + '/api/article/';
+   print(source1);
+   print(source2);
+   print(source3);
+       FormData formData = FormData.fromMap({
+      "articletime": now,
+      "articlecontent": articlecontent,
+      "userid": myid,
+      "articlepic1":await MultipartFile.fromFile(source1,filename: "upload"),
+      "articlepic2":await MultipartFile.fromFile(source2,filename: "upload"),
+      "articlepic3":await MultipartFile.fromFile(source3,filename: "upload"),
+    });
+
+    var dio = new Dio();
+    var response = await dio.post(url, data:formData);
+    String res = response.data.toString();
+    // print('Response: $response');
+    
+   
 
     // var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
   
     setState(() {});
   }
 
-  @override
+  
   Widget build(BuildContext context) {
-    // getUID();
+    getUID();
     return SizedBox(
         width: 450,
         height: 600,
@@ -85,20 +205,20 @@ class _addPostCardState extends State<addPostCard> {
                           child:
                               Text("发布", style: TextStyle(color: Colors.black)),
                           onPressed: () {
-                            // getTAG();
-                            // print(TAG);
                             DateTime now = new DateTime.now();
-                            print(now);
+                            // print(now);
+                            // print('myid:'+myid);
+                            // print(TEXT);
                             // IMGS.clear();
                             // for (int i = 0; i < imageUrl.length; ++i)
                             //   IMGS.add(imageUrl[i].toString());
-                            // insertPost(int.parse(UID), TAG.toString(), TEXT,
-                            //     now.toString(), IMGS);
+                            addArticle(
+                                now.toString().substring(0,19),TEXT,imageUrl[0],imageUrl[1],imageUrl[2]);
                             // setTag("");
                             // for (var i in imageUrl) {
                             //   print(i + "  im imageUrl");
                             // }
-                            // Navigator.pop(context);
+                            Navigator.pop(context);
                             // Navigator.of(context)
                             //     .push(MaterialPageRoute(builder: (context) {
                             //   return indexPage(now: 3);
@@ -139,12 +259,12 @@ class _addPostCardState extends State<addPostCard> {
                           icon: Icon(Icons.photo),
                           iconSize: 80,
                           onPressed: () {
-                            // choosePic(ImageSource.gallery);
+                            choosePic(ImageSource.gallery);
                           }),
                       Wrap(
                           spacing: 20, //主轴上子控件的间距
                           runSpacing: 5, //交叉轴上子控件之间的间距
-                          // children: imageList
+                          children: imageList
                           )
                     ])))));
   }
