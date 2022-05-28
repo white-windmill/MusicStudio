@@ -1,72 +1,40 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:music_studio/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-List listData = [
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-  {
-    "name": '稻香',
-    "singer": "周杰伦",
-    "imageurl": "https://picsum.photos/250?image=9",
-  },
-];
+import 'mineAll.dart';
 
-class MySongSheet extends StatelessWidget {
+// List listData = [
+//   {
+//     "name": '稻香',
+//     "imageurl": "https://picsum.photos/250?image=9",
+//   },
+// ];
+
+String myid;
+
+class MySongSheet extends StatefulWidget {
+  @override
+  State<MySongSheet> createState() => _MySongSheetState();
+}
+
+class _MySongSheetState extends State<MySongSheet> {
+  void initState() {
+    // _readShared();
+    
+      super.initState();
+      print(listData);
+
+    // getData(myid, context);
+  }
+  
+
   @override
   Widget build(BuildContext context) {
-// TODO: implement build
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false, //隐藏返回按钮
@@ -86,7 +54,9 @@ class MySongSheet extends StatelessWidget {
         ),
       ),
       body: ListView(
+        
         children: listData.map((value) {
+          
           return Container(
             height: 150,
             child: Card(
@@ -101,6 +71,7 @@ class MySongSheet extends StatelessWidget {
                     flex: 33,
                     child: Image.network(
                       value['imageurl'],
+                      // "https://picsum.photos/250?image=9"
                     ),
                   ),
                   Expanded(
@@ -112,16 +83,11 @@ class MySongSheet extends StatelessWidget {
                           child: Center(
                               child: Text(
                             value['name'],
+                            // "周杰伦",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           )),
                         ),
-                        Expanded(
-                            flex: 25,
-                            child: Text(value['singer'],
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w300))),
                       ],
                     ),
                   )
@@ -131,84 +97,46 @@ class MySongSheet extends StatelessWidget {
           );
         }).toList(),
       ),
-      // body: GestureDetector(
-      //       child: Card(
-      //         elevation: 3,
-      //         // color: Colors.black38,
-      //         child: Row(
-      //           children: [
-      //             SizedBox(
-      //               width: MediaQuery.of(context).size.width * 0.33,
-      //               child: Image.network(
-      //               'https://picsum.photos/250?image=9',
-
-      //                 fit: BoxFit.fill,
-      //               ),
-      //             ),
-      //             Flexible(
-      //               child: Column(
-      //                 crossAxisAlignment: CrossAxisAlignment.start,
-      //                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                 children: [
-      //                   Text(
-      //                     "歌单名",
-      //                     style: new TextStyle(
-      //                         fontSize: 15.0, fontWeight: FontWeight.bold),
-      //                   ),
-      //                   Text(
-      //                     "location",
-      //                     style: new TextStyle(
-      //                       fontSize: 14.0,
-      //                       fontWeight: FontWeight.normal,
-      //                     ),
-      //                   ),
-      //                   // Row(
-      //                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                   //   children: [
-      //                   //     Text(
-      //                   //       'AA',
-      //                   //       style: TextStyle(
-      //                   //         fontSize: 12.0,
-      //                   //         fontWeight: FontWeight.normal,
-      //                   //       ),
-      //                   //     ),
-      //                   //   ],
-      //                   // ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       onTap: () {
-      //         print("访问一个歌单");
-      //       }
-      // )
     );
+  }
+}
 
-    //   body: ListView(
-    //     children: listData.map((value) {
-    //       return Card(
-    //         margin: EdgeInsets.all(10),
-    //         child: Column(
-    //           children: <Widget>[
-    //             InkWell(
-    //               onTap: () {
-    //                 print("播放音乐");
-    //               },
-    //               child:
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  myid = preferences.get('id');
+  print(myid);
+}
 
-    //               ListTile(
-    //                 title: Text(value["name"]),
-    //                 subtitle:
-    //                     Text(value["singer"], overflow: TextOverflow.ellipsis),
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       );
-    //     }).toList(),
-    //   ),
-    // );
+getData(String userid, BuildContext context) async {
+  var url = Api.url + '/api/user/';
+  var urlImage = Api.url + '/media';
+  try {
+    Map<String, dynamic> map = Map();
+    map['userid'] = userid;
+    var dio = Dio();
+    var response =
+        await dio.get(url, queryParameters: map);
+    print('Response: $response');
+    Map<String, dynamic> data = response.data;
+    print(data['data']);
+    print(data['data'][0]['usercreatedata']);
+    print(data['data'][0]['usercreatedata'].length);
+    if (data['ret'] == 0) {
+      for (int i = 0; i < data['data'][0]['usercreatedata'].length; i++) {
+        listData[i] = {
+          'name': data['data'][0]['usercreatedata'][i]['playlistname'],
+          'imageurl':
+              urlImage + data['data'][0]['usercreatedata'][i]['playlistimage'],
+        };
+      }
+      print("listdata:$listData");
+
+      Fluttertoast.showToast(msg: '登录成功!');
+    } else {
+      Fluttertoast.showToast(msg: '用户名或密码错误!');
+    }
+  } catch (e) {
+    print(e);
+    return null;
   }
 }

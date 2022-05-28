@@ -1,7 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:music_studio/common/api.dart';
 import 'package:music_studio/player_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
+String myid;
+List listData = [];
 
 class minePage extends StatefulWidget {
 
@@ -17,7 +22,9 @@ class _minePageState extends State<minePage> {
       'http://img.chinau.com.cn/attachment//stampNew/20190424/2019042417080487564_t4.jpg';
   @override
   void initState() {
+    _readShared();
     super.initState();
+    getData(myid);
   }
 
   @override
@@ -332,5 +339,44 @@ class MenuItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  myid = preferences.get('id');
+  print(myid);
+}
+
+getData(String userid) async {
+  var url = Api.url + '/api/user/';
+  var urlImage = Api.url + '/media';
+  try {
+    Map<String, dynamic> map = Map();
+    map['userid'] = userid;
+    var dio = Dio();
+    var response =
+        await dio.get(url, queryParameters: map);
+    print('Response: $response');
+    Map<String, dynamic> data = response.data;
+    print(data['data']);
+    print(data['data'][0]['usercreatedata']);
+    print(data['data'][0]['usercreatedata'].length);
+    if (data['ret'] == 0) {
+      for (int i = 0; i < data['data'][0]['usercreatedata'].length; i++) {
+        listData[i] = {
+          'name': data['data'][0]['usercreatedata'][i]['playlistname'],
+          'imageurl':
+              urlImage + data['data'][0]['usercreatedata'][i]['playlistimage'],
+        };
+      }
+      print("listdata:$listData");
+
+      Fluttertoast.showToast(msg: '登录成功!');
+    } else {
+      Fluttertoast.showToast(msg: '用户名或密码错误!');
+    }
+  } catch (e) {
+    print(e);
+    return null;
   }
 }

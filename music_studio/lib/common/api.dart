@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 class Api {
   static final String url = "http://124.220.169.238:8000";
 
+  List listData = [];
+
   static String md5(String plain) {
     var content = new Utf8Encoder().convert(plain);
     var md5 = crypto.md5;

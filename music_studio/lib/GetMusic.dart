@@ -7,7 +7,7 @@ import 'utils/http_util.dart';
 
 
 class GetMusic {
-  static const URL_ROOT = 'http://192.168.43.204:3000';
+  static const URL_ROOT = 'https://mygit-psi.vercel.app';
   static const URL_TOP_SONGS = '$URL_ROOT/playlist/detail?id=';
   static const URL_SONG_DETAIL = '$URL_ROOT/song/detail?ids=';
   static const URL_GET_LYRIC = '$URL_ROOT/lyric?id=';
@@ -57,7 +57,7 @@ class GetMusic {
       return null;
     }
   }
-    static Future<List> getSongDetails(String ids) async {
+    static Future<List> getSongDetails(String ids) async {  //获取歌曲详细信息
     var data =
         await HttpUtil.getJsonData('$URL_SONG_DETAIL$ids', useCache: false);
     List songList = data['songs'];
