@@ -6,11 +6,18 @@ import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String myid;
-List listData = [];
+List listData = [
+  //我的歌单
+];
+
+List history = [
+  //音乐足迹
+];
 
 class minePage extends StatefulWidget {
-
-  const minePage({Key key,}) : super(key: key);
+  const minePage({
+    Key key,
+  }) : super(key: key);
 
   _minePageState createState() => _minePageState();
 }
@@ -25,6 +32,7 @@ class _minePageState extends State<minePage> {
     _readShared();
     super.initState();
     getData(myid);
+    getHistory(myid);
   }
 
   @override
@@ -70,7 +78,6 @@ class _minePageState extends State<minePage> {
                     onTap: () {
                       print("已点击");
                       Navigator.pushNamed(context, '/modify');
-                      
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -99,7 +106,7 @@ class _minePageState extends State<minePage> {
                                 ),
                                 // child: InkWell(
                                 child: Text(
-                                "text",
+                                  "text",
                                   style: TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold,
@@ -145,40 +152,6 @@ class _minePageState extends State<minePage> {
           SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
-                // Container(
-                //   color: Colors.white,
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(
-                //       top: 10.0,
-                //       bottom: 10.0,
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //       children: [
-                //         ContactItem(
-                //           icon: Icons.favorite,
-                //           title: '巴拉巴拉',
-                //           onPressed: () {
-                //             //路由跳转
-                //           print("click");
-                //           },
-                //         ),
-                //         ContactItem(
-                //           icon: Icons.grade,
-                //           title: '巴拉巴拉',
-                //         ),
-                //         ContactItem(
-                //           icon: Icons.brightness_4,
-                //           title: '巴拉巴拉',
-                //         ),
-                //         ContactItem(
-                //           icon: Icons.airplanemode_active,
-                //           title: '巴拉巴拉',
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 Container(
                   color: Colors.white,
                   margin: const EdgeInsets.only(top: 10.0),
@@ -199,7 +172,6 @@ class _minePageState extends State<minePage> {
                               onPressed: () {
                                 //路由跳转
                                 Navigator.pushNamed(context, '/my_song');
-                              
                               },
                             ),
                             Padding(
@@ -235,7 +207,7 @@ class _minePageState extends State<minePage> {
                             MenuItem(
                               title: '音乐足迹',
                               onPressed: () {
-                               print("click");
+                                Navigator.pushNamed(context, '/history');
                               },
                             ),
                             Padding(
@@ -247,6 +219,9 @@ class _minePageState extends State<minePage> {
                             ),
                             MenuItem(
                               title: '猜你想听',
+                              onPressed: () {
+                                print("click");
+                              },
                             ),
                           ],
                         ),
@@ -341,6 +316,7 @@ class MenuItem extends StatelessWidget {
     );
   }
 }
+
 Future _readShared() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   myid = preferences.get('id');
@@ -348,14 +324,14 @@ Future _readShared() async {
 }
 
 getData(String userid) async {
+  listData = [];
   var url = Api.url + '/api/user/';
   var urlImage = Api.url + '/media';
   try {
     Map<String, dynamic> map = Map();
     map['userid'] = userid;
     var dio = Dio();
-    var response =
-        await dio.get(url, queryParameters: map);
+    var response = await dio.get(url, queryParameters: map);
     print('Response: $response');
     Map<String, dynamic> data = response.data;
     print(data['data']);
@@ -363,17 +339,50 @@ getData(String userid) async {
     print(data['data'][0]['usercreatedata'].length);
     if (data['ret'] == 0) {
       for (int i = 0; i < data['data'][0]['usercreatedata'].length; i++) {
-        listData[i] = {
+        listData.add({
           'name': data['data'][0]['usercreatedata'][i]['playlistname'],
           'imageurl':
               urlImage + data['data'][0]['usercreatedata'][i]['playlistimage'],
-        };
+        });
       }
-      print("listdata:$listData");
+      // print("listdata:$listData");
 
-      Fluttertoast.showToast(msg: '登录成功!');
+      print('获取歌单成功!');
     } else {
-      Fluttertoast.showToast(msg: '用户名或密码错误!');
+      print('获取歌单失败！');
+    }
+  } catch (e) {
+    print(e);
+    return null;
+  }
+}
+
+getHistory(String userid) async {
+  history = [];
+  var url = Api.url + '/api/history/';
+  // var urlImage = Api.url + '/media';
+  try {
+    Map<String, dynamic> map = Map();
+    map['userid'] = userid;
+    var dio = Dio();
+    var response = await dio.get(url, queryParameters: map);
+    print('Response: $response');
+    Map<String, dynamic> data = response.data;
+    print(data['data']);
+    print(data['data'].length);
+    if (data['ret'] == 0) {
+      for (int i = 0; i <= data['data'].length-1; i++) {
+        history.add({
+          'listentime': data['data'][i]['listentime'].substring(0,10) + " " + data['data'][i]['listentime'].substring(11,19),
+          'perception': data['data'][i]['perception'],
+          'musicid': data['data'][i]['musicid_id'],
+        });
+      }
+      print("history:$history");
+
+      print("获取历史记录成功！");
+    } else {
+      print("获取历史记录失败！");
     }
   } catch (e) {
     print(e);
