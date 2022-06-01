@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:music_studio/GetMusic.dart';
 import 'package:music_studio/assets/myIcons.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 int listLength = 0;
 List formlist = [];
 String myid = '111';
+List a=[];
 
 Future _readShared() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -36,15 +39,28 @@ class _songListPageState extends State<songListPage> {
      formlist = data["data"];
     listLength = formlist.length;
     // print(formlist[0]['musicname']);
-    setState(() {});
+    formlist = data["data"];
+    listLength = formlist.length;
+    setState(() async {
+      
+         for (var item in formlist) {
+       List temp=await GetMusic.getSongDetails(item['musicid'].toString());
+       a.add(temp[0]);
+       print("22222");
+       print(a);
+       print("22222");
+     }
+    }
+    );
   
   }
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-    super.initState();
+    
     initThisPage();
     getInfor();
+    super.initState();
   }
     @override
   Future<void> initThisPage() async {
@@ -101,12 +117,7 @@ class _songListPageState extends State<songListPage> {
                       height: 5,
                     ),
                     buildGrid(context),
-                    rankListItem(
-                      musicname: "晴天",
-                      musicalbum: "叶惠美",
-                      musicid: '111',
-                      musicsinger: "周杰伦",
-                    ),
+                    
                     
                   ]))
             ],
@@ -245,13 +256,16 @@ class _rankListItemState extends State<rankListItem> {
 
 Widget buildGrid(BuildContext context) {
   List<Widget> tiles = [];
+  
   Widget content;
   int count = 0;
   for (var item in formlist) {
     count++;
     tiles.add(InkWell(
         onTap: () {
-          print("click me");
+          int temp=count;
+          print('count:'+count.toString());
+           PlayerPage.gotoPlayer(context, list:a, index:count-1);
         },
         child: rankListItem(
           count: count,

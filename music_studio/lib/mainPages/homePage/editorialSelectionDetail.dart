@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 List formlist = [];
 String myid = '';
-List a=[];
+List a = [];
 
 updatePostLike(String playlistname, String userid) async {
   var url = Uri.parse(Api.url + '/api/playlist/');
@@ -91,10 +91,8 @@ class _songListDetailState extends State<songListDetail> {
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-
     _readShared();
     getLike();
-
     getInfor();
     super.initState();
   }
@@ -119,24 +117,21 @@ class _songListDetailState extends State<songListDetail> {
     var url = Api.url + '/api/playlist/';
     Map<String, dynamic> map = Map();
     map['playlistname'] = widget.playlistname;
-    // print(widget.playlistname + '111111');
     var dio = Dio();
     var response =
         await dio.get(url, queryParameters: map).timeout(Duration(seconds: 3));
-    // print('Response: $response');
     Map<String, dynamic> data = response.data;
-    // print(data);
+    formlist.clear();
+
+    formlist = data["data"];
+    print(formlist);
     setState(() async {
-      formlist.clear();
-      formlist = data["data"];
       a.clear();
-     for (var item in formlist) {
-       List temp=await GetMusic.getSongDetails(item['musicid'].toString());
-       a.add(temp[0]);
-       print("22222");
-       print(a);
-       print("22222");
-     }
+      for (var item in formlist) {
+        List temp = await GetMusic.getSongDetails(item['musicid'].toString());
+        a.add(temp[0]);
+        //  print(a);
+      }
     });
 
     // print(formlist);
@@ -387,13 +382,14 @@ Widget buildGrid(BuildContext context) {
       onTap: () async {
         print("click me");
         print(item['musicid'].toString());
+        print(item['musicname'].toString());
         // List a=[];
         // print(GetMusic.getSongDetails(item['musicid'].toString()));
         // a=await GetMusic.getSongDetails(item['musicid'].toString());
         // print(a);
 
         // print('111111111'+a.length.toString());
-         PlayerPage.gotoPlayer(context, list:a, index:count);
+        PlayerPage.gotoPlayer(context, list: a, index: count);
       },
       child: songListItem(
         musicname: item['musicname'],
