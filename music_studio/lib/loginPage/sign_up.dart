@@ -214,7 +214,7 @@ try{
         'userid':userid
       });
       var dio = Dio();
-      var response = await dio.post(url,data: formData).timeout(Duration(seconds: 3));
+      var response = await dio.post(url,data: formData);
       print('Response: $response');
     Fluttertoast.showToast(msg: '注册成功!');
     _phone.clear();
