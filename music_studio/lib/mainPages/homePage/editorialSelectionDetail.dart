@@ -1,12 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:music_studio/GetMusic.dart';
 import 'package:music_studio/assets/myIcons.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 List formlist = [];
 String myid = '';
+List a=[];
 
 updatePostLike(String playlistname, String userid) async {
   var url = Uri.parse(Api.url + '/api/playlist/');
@@ -31,22 +35,24 @@ removePostLike(String playlistname, String userid) async {
           '"}');
   // print(response.body);
 }
-updateSongPostLike(String userid,String playlistname, String musicid,String musicname,String musicsinger,String musicalbum) async {
+
+updateSongPostLike(String userid, String playlistname, String musicid,
+    String musicname, String musicsinger, String musicalbum) async {
   var url = Uri.parse(Api.url + '/api/music/');
   var response = await http.post(url,
       headers: {"content-type": "application/json"},
       body: '{"playlistnameuserid": "' +
           userid +
           '", "playlistname": "' +
-         playlistname +
+          playlistname +
           '", "musicid": "' +
-         musicid +
+          musicid +
           '", "musicname": "' +
-         musicname +
-         '", "musicsinger": "' +
-         musicsinger +
-         '", "musicalbum": "' +
-         musicalbum +
+          musicname +
+          '", "musicsinger": "' +
+          musicsinger +
+          '", "musicalbum": "' +
+          musicalbum +
           '"}');
   // print(response.body);
 }
@@ -85,7 +91,7 @@ class _songListDetailState extends State<songListDetail> {
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-    
+
     _readShared();
     getLike();
 
@@ -106,7 +112,7 @@ class _songListDetailState extends State<songListDetail> {
     songListLikeMode = data["ret"];
     int like = data["ret"];
 
-    print("当前状态"+like.toString());
+    print("当前状态" + like.toString());
   }
 
   getInfor() async {
@@ -120,11 +126,19 @@ class _songListDetailState extends State<songListDetail> {
     // print('Response: $response');
     Map<String, dynamic> data = response.data;
     // print(data);
-    setState(() {
+    setState(() async {
       formlist.clear();
-           formlist = data["data"];
-        });
-   
+      formlist = data["data"];
+      a.clear();
+     for (var item in formlist) {
+       List temp=await GetMusic.getSongDetails(item['musicid'].toString());
+       a.add(temp[0]);
+       print("22222");
+       print(a);
+       print("22222");
+     }
+    });
+
     // print(formlist);
   }
 
@@ -191,7 +205,6 @@ class _songListDetailState extends State<songListDetail> {
                       height: 5,
                     ),
                     buildGrid(context),
-                    
                   ]))
             ],
           ),
@@ -367,12 +380,20 @@ class _songListItemState extends State<songListItem> {
 Widget buildGrid(BuildContext context) {
   List<Widget> tiles = [];
   Widget content;
-  int count = 0;
+  int count = -1;
   for (var item in formlist) {
     count++;
     tiles.add(InkWell(
-      onTap: () {
+      onTap: () async {
         print("click me");
+        print(item['musicid'].toString());
+        // List a=[];
+        // print(GetMusic.getSongDetails(item['musicid'].toString()));
+        // a=await GetMusic.getSongDetails(item['musicid'].toString());
+        // print(a);
+
+        // print('111111111'+a.length.toString());
+         PlayerPage.gotoPlayer(context, list:a, index:count);
       },
       child: songListItem(
         musicname: item['musicname'],
