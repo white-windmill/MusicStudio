@@ -5,7 +5,13 @@ import 'package:music_studio/common/api.dart';
 import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+TextEditingController usernameController = TextEditingController();
+TextEditingController infoController = TextEditingController();
+String userhead = "http://img.chinau.com.cn/attachment//stampNew/20190424/2019042417080487564_t4.jpg";
+bool visible = false;
 String myid;
+String myname = '';
+String myInfo = '暂无个人简介';
 List listData = [
   //我的歌单
 ];
@@ -25,14 +31,18 @@ class minePage extends StatefulWidget {
 class _minePageState extends State<minePage> {
   _minePageState();
   final double _appBarHeight = 120.0;
-  final String _userHead =
-      'http://img.chinau.com.cn/attachment//stampNew/20190424/2019042417080487564_t4.jpg';
+  final String _userHead =userhead;
   @override
   void initState() {
     _readShared();
     super.initState();
     getData(myid);
     getHistory(myid);
+    Future.delayed(Duration(milliseconds: 500), () {
+          setState(() {
+            visible = true;
+          });
+    });
   }
 
   @override
@@ -63,7 +73,9 @@ class _minePageState extends State<minePage> {
           ),
         ),
       ),
-      body: CustomScrollView(
+      body: Visibility(
+        visible: visible,
+        child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Colors.white,
@@ -106,7 +118,7 @@ class _minePageState extends State<minePage> {
                                 ),
                                 // child: InkWell(
                                 child: Text(
-                                  "text",
+                                  myname,
                                   style: TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold,
@@ -127,7 +139,7 @@ class _minePageState extends State<minePage> {
                                   left: 0,
                                 ),
                                 child: Text(
-                                  '暂无个人简介',
+                                  myInfo,
                                   style: TextStyle(
                                       color: Colors.black54, fontSize: 15.0),
                                 ),
@@ -236,7 +248,7 @@ class _minePageState extends State<minePage> {
             ),
           )
         ],
-      ),
+      ),),
     );
   }
 }
@@ -326,7 +338,7 @@ Future _readShared() async {
 getData(String userid) async {
   listData = [];
   var url = Api.url + '/api/user/';
-  var urlImage = Api.url + '/media';
+  var urlImage = Api.url + '/media/';
   try {
     Map<String, dynamic> map = Map();
     map['userid'] = userid;
@@ -335,9 +347,19 @@ getData(String userid) async {
     print('Response: $response');
     Map<String, dynamic> data = response.data;
     print(data['data']);
-    print(data['data'][0]['usercreatedata']);
-    print(data['data'][0]['usercreatedata'].length);
+    print(data['data'][0]['username']);
+    // print(data['data'][0]['usercreatedata'].length);
     if (data['ret'] == 0) {
+      if(data['data'][0]['userimage']!=null) {
+
+      userhead = urlImage + data['data'][0]['userimage'];
+      
+      }
+      print(userhead);
+      myname = data['data'][0]['username'];
+      myInfo = data['data'][0]['briefintroduction'];
+      usernameController.text = myname;
+      infoController.text = myInfo;
       for (int i = 0; i < data['data'][0]['usercreatedata'].length; i++) {
         listData.add({
           'name': data['data'][0]['usercreatedata'][i]['playlistname'],
