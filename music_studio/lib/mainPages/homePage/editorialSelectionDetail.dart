@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:music_studio/GetMusic.dart';
 import 'package:music_studio/assets/myIcons.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/mainPages/communityPage/addPostPart.dart';
 import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-List formlist = [];
 String myid = '';
 List a = [];
+List<Widget> tiles = [Divider()];
+List formlist = [];
 
 updatePostLike(String playlistname, String userid) async {
   var url = Uri.parse(Api.url + '/api/playlist/');
@@ -88,12 +90,15 @@ class songListDetail extends StatefulWidget {
 
 class _songListDetailState extends State<songListDetail> {
   List<Widget> widgetList = [];
-  @override
+  Widget content;
+
   void initState() {
     //初始化函数、带监听滑动功能
     _readShared();
     getLike();
+
     getInfor();
+
     super.initState();
   }
 
@@ -113,6 +118,16 @@ class _songListDetailState extends State<songListDetail> {
     print("当前状态" + like.toString());
   }
 
+  initSongList() async {
+    a.clear();
+    print('111111');
+    print(formlist);
+    for (var item in formlist) {
+      List temp = await GetMusic.getSongDetails(item['musicid'].toString());
+      a.add(temp[0]);
+    }
+  }
+
   getInfor() async {
     var url = Api.url + '/api/playlist/';
     Map<String, dynamic> map = Map();
@@ -121,22 +136,33 @@ class _songListDetailState extends State<songListDetail> {
     var response =
         await dio.get(url, queryParameters: map).timeout(Duration(seconds: 3));
     Map<String, dynamic> data = response.data;
-    formlist.clear();
 
-    formlist = data["data"];
-    print(formlist);
-    setState(() async {
-      a.clear();
-      for (var item in formlist) {
-        List temp = await GetMusic.getSongDetails(item['musicid'].toString());
-        a.add(temp[0]);
-        //  print(a);
-      }
+    setState(() {
+      formlist.clear();
+      formlist = data["data"];
     });
 
-    // print(formlist);
+    int count = -1;
+
+    tiles.clear();
+    for (var item in formlist) {
+      count++;
+      tiles.add(InkWell(
+        onTap: () {
+          PlayerPage.gotoPlayer(context, list: a, index: count);
+        },
+        child: songListItem(
+          musicname: item['musicname'],
+          musicalbum: item['musicalbum'],
+          musicid: item['musicid'].toString(),
+          musicsinger: item['musicsinger'],
+        ),
+      ));
+    }
+    initSongList();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -199,7 +225,19 @@ class _songListDetailState extends State<songListDetail> {
                     SizedBox(
                       height: 5,
                     ),
-                    buildGrid(context),
+                    Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: SizedBox(
+                        width: 500,
+                        height: 1000,
+                        child: ListView.builder(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount: tiles.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return tiles[index];
+                            }),
+                      ),
+                    ),
                   ]))
             ],
           ),
@@ -372,35 +410,35 @@ class _songListItemState extends State<songListItem> {
   }
 }
 
-Widget buildGrid(BuildContext context) {
-  List<Widget> tiles = [];
-  Widget content;
-  int count = -1;
-  for (var item in formlist) {
-    count++;
-    tiles.add(InkWell(
-      onTap: () async {
-        print("click me");
-        print(item['musicid'].toString());
-        print(item['musicname'].toString());
-        // List a=[];
-        // print(GetMusic.getSongDetails(item['musicid'].toString()));
-        // a=await GetMusic.getSongDetails(item['musicid'].toString());
-        // print(a);
+// Widget buildGrid(BuildContext context) {
+//   List<Widget> tiles = [];
+//   Widget content;
+//   int count = -1;
+//   for (var item in formlist) {
+//     count++;
+//     tiles.add(InkWell(
+//       onTap: () async {
+//         print("click me");
+//         print(item['musicid'].toString());
+//         print(item['musicname'].toString());
+//         // List a=[];
+//         // print(GetMusic.getSongDetails(item['musicid'].toString()));
+//         // a=await GetMusic.getSongDetails(item['musicid'].toString());
+//         // print(a);
 
-        // print('111111111'+a.length.toString());
-        PlayerPage.gotoPlayer(context, list: a, index: count);
-      },
-      child: songListItem(
-        musicname: item['musicname'],
-        musicalbum: item['musicalbum'],
-        musicid: item['musicid'].toString(),
-        musicsinger: item['musicsinger'],
-      ),
-    ));
-  }
-  content = new Column(
-    children: tiles,
-  );
-  return content;
-}
+//         // print('111111111'+a.length.toString());
+//         PlayerPage.gotoPlayer(context, list: a, index: count);
+//       },
+//       child: songListItem(
+//         musicname: item['musicname'],
+//         musicalbum: item['musicalbum'],
+//         musicid: item['musicid'].toString(),
+//         musicsinger: item['musicsinger'],
+//       ),
+//     ));
+//   }
+//   content = new Column(
+//     children: tiles,
+//   );
+//   return content;
+// }

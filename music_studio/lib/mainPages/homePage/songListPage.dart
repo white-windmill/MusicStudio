@@ -10,13 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 int listLength = 0;
 List formlist = [];
 String myid = '111';
-List a=[];
+List a = [];
 
 Future _readShared() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   myid = preferences.get('id');
-   print(myid);
+  print(myid);
 }
+
 class songListPage extends StatefulWidget {
   //songListPage({Key? key}) : super(key: key);
 
@@ -25,8 +26,14 @@ class songListPage extends StatefulWidget {
 }
 
 class _songListPageState extends State<songListPage> {
-  // List<Widget> widgetList = [];
-
+  
+  initSongList() async {
+    a.clear();
+    for (var item in formlist) {
+      List temp = await GetMusic.getSongDetails(item['musicid'].toString());
+      a.add(temp[0]);
+    }
+  }
 
   getInfor() async {
     var url = Uri.parse(Api.url + '/api/music/rank/');
@@ -36,36 +43,30 @@ class _songListPageState extends State<songListPage> {
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
     print(data);
-     formlist = data["data"];
-    listLength = formlist.length;
-    // print(formlist[0]['musicname']);
     formlist = data["data"];
     listLength = formlist.length;
-    setState(() async {
-      
-         for (var item in formlist) {
-       List temp=await GetMusic.getSongDetails(item['musicid'].toString());
-       a.add(temp[0]);
-       print("22222");
-       print(a);
-       print("22222");
-     }
-    }
-    );
-  
+
+    setState(() {
+      formlist = data["data"];
+      listLength = formlist.length;
+    });
+    initSongList();
   }
+
   @override
   void initState() {
     //初始化函数、带监听滑动功能
-    
+
     initThisPage();
     getInfor();
     super.initState();
   }
-    @override
+
+  @override
   Future<void> initThisPage() async {
     await _readShared();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -117,8 +118,6 @@ class _songListPageState extends State<songListPage> {
                       height: 5,
                     ),
                     buildGrid(context),
-                    
-                    
                   ]))
             ],
           ),
@@ -157,16 +156,15 @@ class _rankListItemState extends State<rankListItem> {
           SizedBox(
             width: 30,
             child: Container(
-                padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
-                child: Text(
-                  widget.count.toString() + "",
-                  style: TextStyle(
-                    fontSize: 19,
-                  ),
+              padding: EdgeInsets.fromLTRB(7, 7, 0, 0),
+              child: Text(
+                widget.count.toString() + "",
+                style: TextStyle(
+                  fontSize: 19,
                 ),
               ),
+            ),
           ),
-           
           Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,16 +254,16 @@ class _rankListItemState extends State<rankListItem> {
 
 Widget buildGrid(BuildContext context) {
   List<Widget> tiles = [];
-  
+
   Widget content;
   int count = 0;
   for (var item in formlist) {
     count++;
     tiles.add(InkWell(
         onTap: () {
-          int temp=count;
-          print('count:'+count.toString());
-           PlayerPage.gotoPlayer(context, list:a, index:count-1);
+          int temp = count;
+          print('count:' + count.toString());
+          PlayerPage.gotoPlayer(context, list: a, index: count - 1);
         },
         child: rankListItem(
           count: count,
