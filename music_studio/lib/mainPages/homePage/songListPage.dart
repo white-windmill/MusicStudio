@@ -261,9 +261,12 @@ Widget buildGrid(BuildContext context) {
     count++;
     tiles.add(InkWell(
         onTap: () {
+          print('我在这里');
+          print( item['musicname'].toString());
+
           int temp = count;
           print('count:' + count.toString());
-          PlayerPage.gotoPlayer(context, list: a, index: count - 1);
+          PlayerPage.gotoPlayer(context, list: a, index:item['sub']);
         },
         child: rankListItem(
           count: count,

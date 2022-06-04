@@ -140,6 +140,7 @@ class _songListDetailState extends State<songListDetail> {
     setState(() {
       formlist.clear();
       formlist = data["data"];
+      print(formlist);
     });
 
     int count = -1;
@@ -149,7 +150,7 @@ class _songListDetailState extends State<songListDetail> {
       count++;
       tiles.add(InkWell(
         onTap: () {
-          PlayerPage.gotoPlayer(context, list: a, index: count);
+          PlayerPage.gotoPlayer(context, list: a, index: item['sub']);
         },
         child: songListItem(
           musicname: item['musicname'],
