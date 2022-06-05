@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 TextEditingController usernameController = TextEditingController();
 TextEditingController infoController = TextEditingController();
 String userhead = "http://img.chinau.com.cn/attachment//stampNew/20190424/2019042417080487564_t4.jpg";
-bool visible = false;
 String myid;
 String myname = '';
 String myInfo = '暂无个人简介';
@@ -18,6 +17,9 @@ List listData = [
 
 List history = [
   //音乐足迹
+];
+List collect = [
+  //我收藏的歌单
 ];
 
 class minePage extends StatefulWidget {
@@ -36,13 +38,8 @@ class _minePageState extends State<minePage> {
   void initState() {
     _readShared();
     super.initState();
-    getData(myid);
-    getHistory(myid);
-    Future.delayed(Duration(milliseconds: 500), () {
-          setState(() {
-            visible = true;
-          });
-    });
+    // getData(myid);
+
   }
 
   @override
@@ -73,9 +70,34 @@ class _minePageState extends State<minePage> {
           ),
         ),
       ),
-      body: Visibility(
-        visible: visible,
-        child: CustomScrollView(
+      body: FutureBuilder(
+        future: getData(myid),
+        builder: _buildFuture,)
+    );
+  }
+    Widget _buildFuture (BuildContext context, AsyncSnapshot snapshot) {
+    switch(snapshot.connectionState) {
+      case ConnectionState.none:
+      print("没有开始请求");
+      return Text("尚未请求");
+      case ConnectionState.active:
+      return Text("ConnectionState.active");
+      case ConnectionState.waiting:
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+      case ConnectionState.done:
+      print("done");
+      if (snapshot.hasError)
+      return  Text("error:${snapshot.error}");
+      return _buildBody(context, snapshot);
+      default:
+      return null;
+    }
+
+  }
+  Widget _buildBody(BuildContext context, AsyncSnapshot snapshot) {
+    return CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Colors.white,
@@ -180,10 +202,10 @@ class _minePageState extends State<minePage> {
                         child: Column(
                           children: [
                             MenuItem(
-                              title: '我的歌曲',
+                              title: '我的收藏',
                               onPressed: () {
                                 //路由跳转
-                                Navigator.pushNamed(context, '/my_song');
+                                Navigator.pushNamed(context, '/my_collect');
                               },
                             ),
                             Padding(
@@ -248,8 +270,7 @@ class _minePageState extends State<minePage> {
             ),
           )
         ],
-      ),),
-    );
+      );
   }
 }
 
@@ -337,6 +358,7 @@ Future _readShared() async {
 
 getData(String userid) async {
   listData = [];
+  collect = [];
   var url = Api.url + '/api/user/';
   var urlImage = Api.url + '/media/';
   try {
@@ -351,9 +373,7 @@ getData(String userid) async {
     // print(data['data'][0]['usercreatedata'].length);
     if (data['ret'] == 0) {
       if(data['data'][0]['userimage']!=null) {
-
       userhead = urlImage + data['data'][0]['userimage'];
-      
       }
       print(userhead);
       myname = data['data'][0]['username'];
@@ -365,6 +385,13 @@ getData(String userid) async {
           'name': data['data'][0]['usercreatedata'][i]['playlistname'],
           'imageurl':
               urlImage + data['data'][0]['usercreatedata'][i]['playlistimage'],
+        });
+      }
+      for (int i = 0; i < data['data'][0]['usercollectdata'].length; i++) {
+        collect.add({
+          'name': data['data'][0]['usercollectdata'][i]['playlistname'],
+          'imageurl':
+              urlImage + data['data'][0]['usercollectdata'][i]['playlistimage'],
         });
       }
       // print("listdata:$listData");
@@ -397,7 +424,7 @@ getHistory(String userid) async {
         history.add({
           'listentime': data['data'][i]['listentime'].substring(0,10) + " " + data['data'][i]['listentime'].substring(11,19),
           'perception': data['data'][i]['perception'],
-          'musicid': data['data'][i]['musicid_id'],
+          'musicname': data['data'][i]['musicname'],
         });
       }
       print("history:$history");

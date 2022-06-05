@@ -13,8 +13,7 @@ class ModifyInformation extends StatefulWidget {
 }
 
 class _ModifyInformationState extends State<ModifyInformation> {
-  // File image = "" as File;
-  // String imageUrl = "";
+
   final ImagePicker picker = new ImagePicker();
   var _imagePath;
   // File image;
@@ -160,6 +159,8 @@ try {
     Map<String, dynamic> data = response.data;
     if (data['ret'] == 0) {
       print("修改成功！");
+      // Navigator.pushNamed(context, '/mine');
+      // Navigator.pushNamed(context, '/home');
       Navigator.of(context).pop();
     } else {
       print("修改失败！");

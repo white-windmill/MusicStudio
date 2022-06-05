@@ -1,15 +1,21 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:music_studio/GetMusic.dart';
 import 'package:provider/provider.dart';
 import 'assets/myIcons.dart';
+import 'common/api.dart';
+import 'mainPages/homePage/editorialSelectionDetail.dart';
 import 'model/music_controller.dart';
 import 'model/play_list.dart';
 import 'utils/screen_size.dart';
 import 'utils/song_util.dart';
+import 'widgets/RenameDialogContent.dart';
 import 'widgets/current_playlist.dart';
 import 'widgets/lyric_widget.dart';
 import 'widgets/my_icon_button.dart';
@@ -39,7 +45,8 @@ class _PlayerPageState extends State<PlayerPage>
     with SingleTickerProviderStateMixin {
   AnimationController _animController;
   PlayerState playerState = PlayerState.loading;
-
+  TextEditingController _mood = TextEditingController();
+  DateTime datetime = DateTime.now();
   Map song;
   String url;
   int duration = 0;
@@ -57,29 +64,28 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      _animController =
-        AnimationController(duration: const Duration(seconds: 24), vsync: this);
-    _animController.addStatusListener((status) {
-      print("RotationTransition: $status");
+      _animController = AnimationController(
+          duration: const Duration(seconds: 24), vsync: this);
+      _animController.addStatusListener((status) {
+        print("RotationTransition: $status");
+      });
+      ScreenSize.getScreenSize(context);
+      print(ScreenSize.height);
+      imageSize = ScreenSize.height ~/ 3;
+
+      print(imageSize);
+      if (imageSize == 0) {
+        imageSize = 250;
+      }
+
+      _lyricPage = LyricPage();
+
+      musicController = Provider.of<MusicController>(context, listen: false);
+      initMusicListener();
+
+      musicController.startSong();
+      //执行代码写在这里
     });
-    ScreenSize.getScreenSize(context);
-    print(ScreenSize.height);
-    imageSize = ScreenSize.height ~/ 3;
-
-    print(imageSize);
-    if (imageSize == 0) {
-      imageSize = 250;
-    }
-
-    _lyricPage = LyricPage();
-
-    musicController = Provider.of<MusicController>(context, listen: false);
-    initMusicListener();
-
-    musicController.startSong();
-    //执行代码写在这里
-    });
-    
   }
 
   _onStartLoading() {
@@ -88,7 +94,7 @@ class _PlayerPageState extends State<PlayerPage>
     songImage = SongUtil.getSongImage(song, size: imageSize);
     artistNames = SongUtil.getArtistNames(song);
 
-    print("StartSong: ${song['name']}， imageSize: $imageSize");
+    print("StartSong: ${song['name']}, imageSize: $imageSize");
 
     if (songImage == null || songImage.isEmpty) {
       GetMusic.getSongDetail(song['id'].toString()).then((songDetail) {
@@ -190,7 +196,33 @@ class _PlayerPageState extends State<PlayerPage>
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 14.0, color: Colors.white60),
       ),
-      // trailing: FavoriteIcon(song) // 收藏按钮
+      trailing: IconButton(
+          icon: Icon(Icons.add, color: Colors.white),
+          onPressed: () {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return RenameDialog(
+                    contentWidget: RenameDialogContent(
+                      title: "请输入心情",
+                      okBtnTap: () {
+                        print(myid);
+                        createFootstep(
+                            myid,
+                            datetime.toString(),
+                            song['id'].toString(),
+                            _mood.text,
+                            song['name'],
+                            artistNames);
+                        // print(datetime);
+                      },
+                      vc: _mood,
+                      cancelBtnTap: () {},
+                    ),
+                  );
+                });
+          }),
     );
   }
 
@@ -277,29 +309,7 @@ class _PlayerPageState extends State<PlayerPage>
     );
   }
 
-  Widget _buildProgressBar() {
-    return Container(
-        padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
-        child: MyProgressBar(
-            duration: duration,
-            position: position,
-            onChanged: (double value) {
-              setState(() {
-                position = value.toInt();
-              });
-              _lyricPage.updatePosition(position, isTaping: true);
-            },
-            onChangeStart: (double value) {
-              isTaping = true;
-            },
-            onChangeEnd: (double value) {
-              isTaping = false;
-              musicController.seek(value);
-            }));
-  }
-
   Widget _buildControllerBar() {
-    // 循环方式
     CycleType cycleType = musicController.playList.cycleType;
     return Container(
         padding: EdgeInsets.only(top: 8.0, bottom: 24.0),
@@ -316,9 +326,6 @@ class _PlayerPageState extends State<PlayerPage>
               size: 30,
               onPressed: () {
                 musicController.playList.changCycleType();
-
-                Fluttertoast.showToast(
-                    msg: musicController.playList.getCycleName());
                 setState(() {});
               },
             ),
@@ -365,6 +372,27 @@ class _PlayerPageState extends State<PlayerPage>
             )
           ],
         ));
+  }
+
+  Widget _buildProgressBar() {
+    return Container(
+        padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+        child: MyProgressBar(
+            duration: duration,
+            position: position,
+            onChanged: (double value) {
+              setState(() {
+                position = value.toInt();
+              });
+              _lyricPage.updatePosition(position, isTaping: true);
+            },
+            onChangeStart: (double value) {
+              isTaping = true;
+            },
+            onChangeEnd: (double value) {
+              isTaping = false;
+              musicController.seek(value);
+            }));
   }
 
   void _buildAnim() {
@@ -424,5 +452,43 @@ class _PlayerPageState extends State<PlayerPage>
         ]);
       }),
     );
+  }
+
+  createFootstep(String userid, String listentime, String musicid, String mood,
+      String musicname, String artistname) async {
+    var url = Api.url + '/api/history/';
+    try {
+      // var data = {
+      //   'userid':userid,
+      //   'listentime':jsonEncode(listentime,toEncodable: myEncode),
+      //   'musicid':musicid,
+      //   'perception':mood,
+      //   'musicname':musicname,
+      //   'musicsinger':artistname,
+      //   'musicalbum':'七里香'
+      // };
+      Map<String, dynamic> map = Map();
+      map['userid'] = userid;
+      map['listentime'] = listentime;
+      map['musicid'] = musicid;
+      map['perception'] = mood;
+      map['musicname'] = musicname;
+      map['musicsinger'] = artistname;
+      map['musicalbum'] = '七里香';
+      var dio = Dio();
+      var response = await dio.post(url, data: map);
+      print('Response: $response');
+      Fluttertoast.showToast(msg: '添加成功!');
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  dynamic myEncode(dynamic item) {
+    if (item is DateTime) {
+      return item.toIso8601String();
+    }
+    return item;
   }
 }

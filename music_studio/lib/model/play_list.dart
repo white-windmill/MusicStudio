@@ -78,13 +78,5 @@ class PlayList {
     }
   }
 
-  String getCycleName() {
-    String cycleName;
-    switch(cycleType) {
-      case CycleType.queue: cycleName = '顺序播放';break;
-      case CycleType.one: cycleName = '单曲循环';break;
-      case CycleType.random: cycleName = '随机播放';break;
-    }
-    return cycleName;
-  }
+
 }

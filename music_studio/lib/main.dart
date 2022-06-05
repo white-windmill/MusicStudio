@@ -11,7 +11,7 @@ import 'mainPages/communityPage/communityAll.dart';
 import 'mainPages/homePage/homeAll.dart';
 import 'mainPages/minePage/mineAll.dart';
 import 'mainPages/minePage/modify_information.dart';
-import 'mainPages/minePage/mysong.dart';
+import 'mainPages/minePage/mycollect.dart';
 import 'mainPages/minePage/mysongsheet.dart';
 import 'model/music_controller.dart';
 void main() {
@@ -62,7 +62,7 @@ class Router extends StatelessWidget {
     '/bottom':(context) => Bottom(),
     '/sign_up':(context) => SignUp(),
     '/forget_password':(context) => ForgetPassword(),
-    '/my_song':(context) => MySong(),
+    '/my_collect':(context) => MyCollect(),
     '/my_songsheet':(context) => MySongSheet(),
     '/modify':(context) => ModifyInformation(),
     '/history':(context) => Footstep(),

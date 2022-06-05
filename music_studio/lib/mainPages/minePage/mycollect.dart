@@ -1,56 +1,31 @@
-import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:music_studio/common/api.dart';
-import 'package:music_studio/widgets/RenameDialogContent.dart';
 
 import 'mineAll.dart';
 
-class MySongSheet extends StatefulWidget {
+
+class MyCollect extends StatefulWidget {
   @override
-  State<MySongSheet> createState() => _MySongSheetState();
+  State<MyCollect> createState() => _MyCollectState();
 }
 
-class _MySongSheetState extends State<MySongSheet> {
-  TextEditingController sheetname = TextEditingController();
-  @override
+class _MyCollectState extends State<MyCollect> {
+    @override
   void initState() {
-    super.initState();
-    // print(listData);
+      super.initState();
+      print(collect);
   }
-
-  @override
+    @override
   void dispose() {
     super.dispose();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add_circle,color: Colors.black),
-              onPressed: () {
-                    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return RenameDialog(
-            contentWidget: RenameDialogContent(
-              title: "请输入歌单名称",
-              okBtnTap: () {
-                createSheet(myid, sheetname.text);
-              },
-              vc: sheetname,
-              cancelBtnTap: () {},
-            ),
-          );
-        });
-              }),
-        ],
         automaticallyImplyLeading: false, //隐藏返回按钮
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -60,7 +35,7 @@ class _MySongSheetState extends State<MySongSheet> {
         elevation: 0, //将向导栏的阴影设为0，确保全透明
         backgroundColor: Colors.transparent, //将向导栏设为透明颜色
         title: Text(
-          "我的歌单",
+          "我的收藏歌单",
           style: TextStyle(
             fontSize: 20.0,
             color: Colors.black54,
@@ -72,7 +47,7 @@ class _MySongSheetState extends State<MySongSheet> {
         builder: _buildFuture,)
     );
   }
-    Widget _buildFuture (BuildContext context, AsyncSnapshot snapshot) {
+  Widget _buildFuture (BuildContext context, AsyncSnapshot snapshot) {
     switch(snapshot.connectionState) {
       case ConnectionState.none:
       print("没有开始请求");
@@ -85,21 +60,19 @@ class _MySongSheetState extends State<MySongSheet> {
       );
       case ConnectionState.done:
       print("done");
-      if (snapshot.hasError)
-      return  Text("error:${snapshot.error}");
       return _createListView(context, snapshot);
       default:
       return null;
     }
 
   }
-  Widget _createListView(BuildContext context, AsyncSnapshot snapshot) {
-    return ListView(
-        children: listData.map((value) {
+  Widget _createListView(BuildContext context, AsyncSnapshot snapshot){
+    return
+    ListView(   
+        children: collect.map((value) {
           return Container(
             height: 150,
             child: Card(
-                // color: Colors.orange,
                 child: GestureDetector(
               onTap: () {
                 print("访问这个歌单");
@@ -134,28 +107,8 @@ class _MySongSheetState extends State<MySongSheet> {
           );
         }).toList(),
       );
-  }
-  createSheet(String userid,String sheetname) async{
-    var url = Api.url + '/api/playlist/creat/';
-    try{
-      FormData formData = FormData.fromMap({
-        'userid':userid,
-        'playlistname':sheetname,
-      });
-      var dio = Dio();
-      var response = await dio.post(url,data: formData);
-      print('Response: $response');
-    Fluttertoast.showToast(msg: '创建成功!');
-          setState(() {
-          print("刷新页面！");
-          print(listData);
-        });
-
-        
-    }catch(e){
-      print(e);
-      return null;
-    }
-
+    
   }
 }
+
+

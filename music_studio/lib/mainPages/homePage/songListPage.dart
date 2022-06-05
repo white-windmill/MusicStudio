@@ -65,6 +65,7 @@ class _songListPageState extends State<songListPage> {
   @override
   Future<void> initThisPage() async {
     await _readShared();
+    print("myid:$myid");
   }
 
   Widget build(BuildContext context) {
