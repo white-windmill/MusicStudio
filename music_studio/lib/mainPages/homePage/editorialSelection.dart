@@ -81,11 +81,7 @@ class _editorialSelectionState extends State<editorialSelection> {
                     formlist[1]['playlistimage'],
                 id: formlist[0]['id'].toString(),
               ),
-              picTextBtn(
-                playlistname: "失恋日记 | 换不同的场景 但哪里都是你",
-                playlistimage:
-                    'http://p3.music.126.net/BLMmLfUNu0zdprDISL_hTw==/109951165764406932.jpg?param=200y200',
-              ),
+            
             ],
           ),
         ),
@@ -133,7 +129,10 @@ class recommendItem extends StatelessWidget {
             width: 10,
             height: 10,
           ),
-          Text(playlistname)
+          SizedBox(
+            height: 65,
+            child:Text(playlistname) ,)
+          
         ]),
       ),
     );

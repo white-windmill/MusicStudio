@@ -30,17 +30,20 @@ class _articleListPartState extends State<articleListPart> {
       headers: {"content-type": "application/json"},
     );
     var data = jsonDecode(Utf8Codec().decode(response.bodyBytes));
-    formlist = data["data"];
+    formlist=formlist = data["data"];
     print(formlist[0]['articleid']);
     listLength = formlist.length;
     setState(() {});
-    for (var item in formlist) {
+    // formlist.reversed;
+    print(formlist.reversed);
+    for (var item in formlist.reversed) {
       List<String> tmp = [];
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic1']);
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic2']);
       tmp.add('http://124.220.169.238:8000/media/' + item['articlepic3']);
       String time=item['articletime'].toString().substring(5,10)+' '+item['articletime'].toString().substring(11,16);
       widgetList.add(new postCardPage(
+        userid_id:item['userid_id'].toString(),
         articletime: time,
         articlecontent: item['articlecontent'].toString(),
         articlelike: item['articlelike'],

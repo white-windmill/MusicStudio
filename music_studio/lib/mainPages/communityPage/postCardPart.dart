@@ -4,10 +4,12 @@ import 'package:music_studio/assets/myIcons.dart';
 import 'package:music_studio/common/api.dart';
 import 'package:music_studio/mainPages/communityPage/commentCardPart.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_studio/mainPages/communityPage/userArticle.dart';
 
 class postCardPage extends StatefulWidget {
   postCardPage(
       {Key key,
+      this.userid_id,
       this.articleid,
       this.userimage,
       this.username,
@@ -27,7 +29,7 @@ class postCardPage extends StatefulWidget {
   String articletime;
   String device;
   String articlecontent;
-
+  String userid_id;
   List<String> imageList;
   int articlelike;
   int articlecomment;
@@ -49,7 +51,8 @@ class _postCardPageState extends State<postCardPage> {
         headers: {"content-type": "application/json"},
         body: '{"articleid": "${articleid}"' + '}');
   }
-   delUpdatePostLikeCommShare(String articleid) async {
+
+  delUpdatePostLikeCommShare(String articleid) async {
     var url = Uri.parse(Api.url + '/api/article/del/');
     print(articleid);
     var response = await http.put(url,
@@ -110,7 +113,14 @@ class _postCardPageState extends State<postCardPage> {
                                     // width: 150,
                                     height: 150))),
                         onTap: () {
-                          print("click");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserArticlePage(
+                                        userName:widget.username,
+                                        userid: widget.userid_id,
+                                        userImage: widget.userimage,
+                                      )));
                         }),
                     title: IntrinsicWidth(
                         child: new Column(
@@ -148,17 +158,17 @@ class _postCardPageState extends State<postCardPage> {
                       // widget.uid == int.parse(UID)
                       //     ? Text("")
                       //     :
-                      IconButton(
-                          color: widget.followMode == 1
-                              ? Colors.red[700]
-                              : Colors.black,
-                          icon: widget.followMode == 1
-                              ? Icon(MyIcons.followFont, size: 28)
-                              : Icon(MyIcons.followFont),
-                          onPressed: () {
-                            showFollowDialog(context);
-                            print("click");
-                          })
+                      // IconButton(
+                          // color: widget.followMode == 1
+                          //     ? Colors.red[700]
+                          //     : Colors.black,
+                          // icon: widget.followMode == 1
+                          //     ? Icon(MyIcons.followFont, size: 28)
+                          //     : Icon(MyIcons.followFont),
+                          // onPressed: () {
+                          //   showFollowDialog(context);
+                          //   print("click");
+                          // })
                     ]),
                 body: Neumorphic(
                     style: NeumorphicStyle(

@@ -1,9 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mineAll.dart';
 
+String userId;
 
+Future _readShared() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  userId = preferences.get('id');
+  // print(myid);
+}
 class MyCollect extends StatefulWidget {
   @override
   State<MyCollect> createState() => _MyCollectState();
@@ -12,6 +20,7 @@ class MyCollect extends StatefulWidget {
 class _MyCollectState extends State<MyCollect> {
     @override
   void initState() {
+    _readShared();
       super.initState();
       print(collect);
   }
@@ -43,7 +52,7 @@ class _MyCollectState extends State<MyCollect> {
         ),
       ),
       body: FutureBuilder(
-        future: getData(myid),
+        future: getData(userId),
         builder: _buildFuture,)
     );
   }
@@ -75,7 +84,13 @@ class _MyCollectState extends State<MyCollect> {
             child: Card(
                 child: GestureDetector(
               onTap: () {
-                print("访问这个歌单");
+                Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => songListDetail(
+                      playlistname:  value['name'],
+                      playlistimage:  value['imageurl'],
+                    )));
               },
               child: Row(
                 children: [
