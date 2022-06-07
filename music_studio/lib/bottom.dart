@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mainPages/minePage/mineAll.dart';
 import 'mainPages/communityPage/communityAll.dart';
 import 'mainPages/homePage/homeAll.dart';
+
   class Bottom extends StatefulWidget {
    _BottomState createState() => _BottomState();
 }

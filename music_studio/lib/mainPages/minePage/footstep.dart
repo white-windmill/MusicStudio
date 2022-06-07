@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_studio/loginPage/login.dart';
 import 'package:music_studio/mainPages/minePage/mineAll.dart';
 
 class Footstep extends StatefulWidget {
@@ -43,7 +44,7 @@ class _FootstepState extends State<Footstep> {
           ),
         ),
         body: FutureBuilder(
-          future: getHistory(myid),
+          future: getHistory(mineid),
           builder: _buildFuture,
         ));
   }

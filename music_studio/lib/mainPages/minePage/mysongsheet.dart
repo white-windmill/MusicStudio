@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:music_studio/bottom.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/loginPage/login.dart';
 import 'package:music_studio/widgets/RenameDialogContent.dart';
 
 import 'mineAll.dart';
@@ -42,7 +44,7 @@ class _MySongSheetState extends State<MySongSheet> {
             contentWidget: RenameDialogContent(
               title: "请输入歌单名称",
               okBtnTap: () {
-                createSheet(myid, sheetname.text);
+                createSheet(mineid, sheetname.text);
               },
               vc: sheetname,
               cancelBtnTap: () {},
@@ -68,7 +70,7 @@ class _MySongSheetState extends State<MySongSheet> {
         ),
       ),
       body: FutureBuilder(
-        future: getData(myid),
+        future: getData(mineid),
         builder: _buildFuture,)
     );
   }
@@ -104,6 +106,11 @@ class _MySongSheetState extends State<MySongSheet> {
               onTap: () {
                 print("访问这个歌单");
               },
+              onLongPress:(){
+                showMyAlertDialog(context,value['name']);
+
+
+              } ,
               child: Row(
                 children: [
                   Expanded(
@@ -135,6 +142,29 @@ class _MySongSheetState extends State<MySongSheet> {
         }).toList(),
       );
   }
+  
+  removeSheet(String userid,String sheetname) async{
+    var url = Api.url + '/api/playlist/del/';
+    try{
+      Map<String, dynamic> map = Map();
+      map['userid'] = userid;
+      map['playlistname'] = sheetname;
+      
+      var dio = Dio();
+      var response = await dio.delete(url,data: map);
+      print('Response: $response');
+    Fluttertoast.showToast(msg: '删除成功!');
+          setState(() {
+          print("刷新页面！");
+          print(listData);
+        });
+
+        
+    }catch(e){
+      print(e);
+      return null;
+    }
+  }
   createSheet(String userid,String sheetname) async{
     var url = Api.url + '/api/playlist/creat/';
     try{
@@ -158,4 +188,46 @@ class _MySongSheetState extends State<MySongSheet> {
     }
 
   }
+    void showMyAlertDialog(BuildContext context,String sheet) {
+//设置按钮
+  Widget okButton = FlatButton(
+    child: Text("确定"),
+      onPressed: () {
+        if(sheet == "默认歌单") {
+          Fluttertoast.showToast(msg: "无法删除此歌单！");
+
+        }
+        else {
+          removeSheet(mineid, sheet);
+        }
+        
+        Navigator.pop(context);
+      },
+  );
+  Widget cancelButton = FlatButton(
+    child: Text("取消"),
+    onPressed: () { 
+      Navigator.pop(context);
+    },
+  );
+ 
+  //设置对话框
+  AlertDialog alert = AlertDialog(
+    title: Text("确定删除这个歌单吗？"),
+    actions: [
+      okButton,
+      cancelButton
+    ],
+  );
+ 
+  //显示对话框
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+
+  }
+  
 }

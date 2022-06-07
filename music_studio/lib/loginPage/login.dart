@@ -8,12 +8,16 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:music_studio/GetMusic.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/mainPages/minePage/mineAll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:music_studio/main.dart';
 
 final TextEditingController phoneNumberController = new TextEditingController();
 final TextEditingController passwordController = new TextEditingController();
-
+String mineid;
+List listData = [
+  //我的歌单
+];
 setUserName(String id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('id', id);
@@ -264,9 +268,10 @@ try{
      String myid="111";
      SharedPreferences preferences = await SharedPreferences.getInstance();
      myid = preferences.get('id');
-     print(myid);
-    // phoneNumberController.clear();
-    // passwordController.clear();
+     mineid = myid;
+     getData(myid);
+     print("listdata:$listData");
+    //  if(listData[0])
     Navigator.pushNamed(context, '/bottom');
     // Navigator.pushNamed(context, '/bottom',
     //     arguments: {'username': username, 'password': password});

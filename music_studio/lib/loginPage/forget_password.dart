@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:music_studio/common/api.dart';
 
 class ForgetPassword extends StatelessWidget {
   @override
@@ -200,37 +201,6 @@ class SurePassword extends StatelessWidget {
 }
 
 
-//验证用户是否在数据库内
-//setState函数需要在可变组件内使用，故_check函数需要定义在组件内作为内置函数方可使用
-  // _check(String username, BuildContext context) async {
-  //   var url = Uri.parse(Api.url + '/user/check?username=' + username);
-  //   var response = await http.post(url);
-  //   print('Response body: ${response.body}');
-  //   if (response.body == '1') {      //respons返回1说明用户在数据库中存在，可以进行验证密码和验证码环节
-  //     if (newpasswordController.text.isNotEmpty &&
-  //         passwordsureController.text.isNotEmpty) {
-  //       if (passwordsureController.text != newpasswordController.text)
-  //         Fluttertoast.showToast(msg: '两次输入的密码不一致！');
-  //       else {
-  //         print('点击了发送验证码！');
-  //         print('用户名：' + phonenumController.text);
-  //         print('新密码：' + newpasswordController.text);
-  //         print('确认密码：' + passwordsureController.text);
-  //         setState(() {
-  //           _buttonClickListen();//监听函数，用于设置按钮的是否可点
-  //         });
-  //         print('生成验证码：' + flag);//将生成的4位随机验证码打印到终端
-  //         Fluttertoast.showToast(msg: '验证码已发送！');
-  //       }
-  //     } else if (newpasswordController.text.isEmpty)
-  //       Fluttertoast.showToast(msg: '请输入新密码！');
-  //     else
-  //       Fluttertoast.showToast(msg: '请确认新密码！');
-  //   } else
-  //     Fluttertoast.showToast(msg: '用户名不存在!');
-  // }
-
-
 //修改密码按钮
 class ChangeButton extends StatelessWidget {
   @override
@@ -271,19 +241,19 @@ class ChangeButton extends StatelessWidget {
 }
 
 // //更新密码函数
-// _update(String username, String password, BuildContext context) async {
-//   var url = Uri.parse(Api.url + '/user/check?username=' + username);
-//   var response = await http.post(url);
-//   print('Response body: ${response.body}');
-//   if (response.body == '1') {
-//     url = Uri.parse(Api.url + '/user/update');
-//     response = await http.post(url,
-//         headers: {"content-type": "application/json"},
-//         body: '{"username": "${username}", "password": "' +
-//             Api.md5(password) +
-//             '"}');
-//     print('Response body: ${response.body}');
-//     Fluttertoast.showToast(msg: '修改成功!');
-//   } else
-//     Fluttertoast.showToast(msg: '用户名不存在!');
-// }
+_update(String username, String password, BuildContext context) async {
+  var url = Uri.parse(Api.url + '/user/check?username=' + username);
+  var response = await http.post(url);
+  print('Response body: ${response.body}');
+  if (response.body == '1') {
+    url = Uri.parse(Api.url + '/user/update');
+    response = await http.post(url,
+        headers: {"content-type": "application/json"},
+        body: '{"username": "$username", "password": "' +
+            Api.md5(password) +
+            '"}');
+    print('Response body: ${response.body}');
+    Fluttertoast.showToast(msg: '修改成功!');
+  } else
+    Fluttertoast.showToast(msg: '用户名不存在!');
+}

@@ -2,20 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/loginPage/login.dart';
 import 'package:music_studio/mainPages/communityPage/userArticle.dart';
-import 'package:music_studio/player_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 TextEditingController usernameController = TextEditingController();
 TextEditingController infoController = TextEditingController();
 String userhead =
     "http://img.chinau.com.cn/attachment//stampNew/20190424/2019042417080487564_t4.jpg";
-String myid;
+
 String myname = '';
 String myInfo = '暂无个人简介';
-List listData = [
-  //我的歌单
-];
 
 List history = [
   //音乐足迹
@@ -34,11 +31,11 @@ class minePage extends StatefulWidget {
 
 class _minePageState extends State<minePage> {
   _minePageState();
+
   final double _appBarHeight = 120.0;
   final String _userHead = userhead;
   @override
   void initState() {
-    _readShared();
     super.initState();
     // getData(myid);
   }
@@ -72,7 +69,7 @@ class _minePageState extends State<minePage> {
           ),
         ),
         body: FutureBuilder(
-          future: getData(myid),
+          future: getData(mineid),
           builder: _buildFuture,
         ));
   }
@@ -223,20 +220,6 @@ class _minePageState extends State<minePage> {
                               Navigator.pushNamed(context, '/my_songsheet');
                             },
                           ),
-                          MenuItem(
-                            title: '我的帖子',
-                            onPressed: () {
-                              //路由跳转
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => UserArticlePage(
-                                            userName: myname,
-                                            userid: myid,
-                                            userImage: userhead,
-                                          )));
-                            },
-                          ),
                         ],
                       ),
                     ),
@@ -267,9 +250,16 @@ class _minePageState extends State<minePage> {
                             ),
                           ),
                           MenuItem(
-                            title: '猜你想听',
+                            title: '我的帖子',
                             onPressed: () {
-                              print("click");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UserArticlePage(
+                                            userName: myname,
+                                            userid: mineid,
+                                            userImage: userhead,
+                                          )));
                             },
                           ),
                         ],
@@ -365,12 +355,6 @@ class MenuItem extends StatelessWidget {
   }
 }
 
-Future _readShared() async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  myid = preferences.get('id');
-  print(myid);
-}
-
 getData(String userid) async {
   listData = [];
   collect = [];
@@ -396,18 +380,34 @@ getData(String userid) async {
       usernameController.text = myname;
       infoController.text = myInfo;
       for (int i = 0; i < data['data'][0]['usercreatedata'].length; i++) {
-        listData.add({
-          'name': data['data'][0]['usercreatedata'][i]['playlistname'],
-          'imageurl':
-              urlImage + data['data'][0]['usercreatedata'][i]['playlistimage'],
-        });
+        if (i == 0) {
+          listData.add({
+            'name': "默认歌单",
+            'imageurl': urlImage +
+                data['data'][0]['usercreatedata'][i]['playlistimage'],
+          });
+        } else {
+          listData.add({
+            'name': data['data'][0]['usercreatedata'][i]['playlistname'],
+            'imageurl': urlImage +
+                data['data'][0]['usercreatedata'][i]['playlistimage'],
+          });
+        }
       }
       for (int i = 0; i < data['data'][0]['usercollectdata'].length; i++) {
-        collect.add({
-          'name': data['data'][0]['usercollectdata'][i]['playlistname'],
-          'imageurl':
-              urlImage + data['data'][0]['usercollectdata'][i]['playlistimage'],
-        });
+        if (i == 0) {
+          collect.add({
+            'name': "默认收藏歌单",
+            'imageurl': urlImage +
+                data['data'][0]['usercollectdata'][i]['playlistimage'],
+          });
+        } else {
+          collect.add({
+            'name': data['data'][0]['usercollectdata'][i]['playlistname'],
+            'imageurl': urlImage +
+                data['data'][0]['usercollectdata'][i]['playlistimage'],
+          });
+        }
       }
       // print("listdata:$listData");
 

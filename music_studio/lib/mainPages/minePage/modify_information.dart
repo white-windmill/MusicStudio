@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:music_studio/bottom.dart';
 import 'package:music_studio/common/api.dart';
+import 'package:music_studio/loginPage/login.dart';
 
 import 'mineAll.dart';
 
@@ -118,7 +120,7 @@ class _ModifyInformationState extends State<ModifyInformation> {
               onPressed: (){
                 print(_imagePath);
                 print(_imagePath.runtimeType.toString());
-                _modify_Info(myid, usernameController.text, infoController.text, _imagePath.toString());
+                _modify_Info(mineid, usernameController.text, infoController.text, _imagePath.toString());
                 
               }),
               
@@ -160,8 +162,8 @@ try {
     if (data['ret'] == 0) {
       print("修改成功！");
       // Navigator.pushNamed(context, '/mine');
-      // Navigator.pushNamed(context, '/home');
-      Navigator.of(context).pop();
+      Navigator.pushNamed(context, '/bottom');
+      // Navigator.of(context).pop();
     } else {
       print("修改失败！");
     }

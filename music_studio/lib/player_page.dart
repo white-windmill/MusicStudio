@@ -10,6 +10,7 @@ import 'package:music_studio/GetMusic.dart';
 import 'package:provider/provider.dart';
 import 'assets/myIcons.dart';
 import 'common/api.dart';
+import 'loginPage/login.dart';
 import 'mainPages/homePage/editorialSelectionDetail.dart';
 import 'model/music_controller.dart';
 import 'model/play_list.dart';
@@ -64,6 +65,7 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
+      
       _animController = AnimationController(
           duration: const Duration(seconds: 24), vsync: this);
       _animController.addStatusListener((status) {
@@ -196,10 +198,10 @@ class _PlayerPageState extends State<PlayerPage>
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 14.0, color: Colors.white60),
       ),
-      trailing: IconButton(
-          icon: Icon(Icons.add, color: Colors.white),
-          onPressed: () {
-            showDialog(
+      trailing: GestureDetector(
+        onDoubleTap: () => showMySimpleDialog(context),
+        onTap:(){
+          showDialog(
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
@@ -215,14 +217,76 @@ class _PlayerPageState extends State<PlayerPage>
                             _mood.text,
                             song['name'],
                             artistNames);
-                        // print(datetime);
                       },
                       vc: _mood,
                       cancelBtnTap: () {},
                     ),
                   );
                 });
-          }),
+        } ,
+
+        child: Icon(Icons.add,color: Colors.white,)),
+      // trailing: Row(children: <Widget>[
+      //   IconButton(
+      //     icon: Icon(Icons.add, color: Colors.white),
+      //     onPressed: () {
+      //       showDialog(
+      //           barrierDismissible: false,
+      //           context: context,
+      //           builder: (context) {
+      //             return RenameDialog(
+      //               contentWidget: RenameDialogContent(
+      //                 title: "请输入心情",
+      //                 okBtnTap: () {
+      //                   print(myid);
+      //                   createFootstep(
+      //                       myid,
+      //                       datetime.toString(),
+      //                       song['id'].toString(),
+      //                       _mood.text,
+      //                       song['name'],
+      //                       artistNames);
+      //                 },
+      //                 vc: _mood,
+      //                 cancelBtnTap: () {},
+      //               ),
+      //             );
+      //           });
+      //     }),
+      //     IconButton(
+      //     icon: Icon(Icons.add, color: Colors.white),
+      //     onPressed: () {
+            
+      //     }),
+      // ],
+      // ),
+      // trailing: IconButton(
+      //     icon: Icon(Icons.add, color: Colors.white),
+      //     onPressed: () {
+      //       showDialog(
+      //           barrierDismissible: false,
+      //           context: context,
+      //           builder: (context) {
+      //             return RenameDialog(
+      //               contentWidget: RenameDialogContent(
+      //                 title: "请输入心情",
+      //                 okBtnTap: () {
+      //                   print(myid);
+      //                   createFootstep(
+      //                       myid,
+      //                       datetime.toString(),
+      //                       song['id'].toString(),
+      //                       _mood.text,
+      //                       song['name'],
+      //                       artistNames);
+      //                   // print(datetime);
+      //                 },
+      //                 vc: _mood,
+      //                 cancelBtnTap: () {},
+      //               ),
+      //             );
+      //           });
+      //     }),
     );
   }
 
@@ -453,20 +517,52 @@ class _PlayerPageState extends State<PlayerPage>
       }),
     );
   }
+  void showMySimpleDialog(BuildContext context) {
+    var itemlist = listData.map((value) => SimpleDialogOption(
+      onPressed: () {
+        insertPlayList(myid, value['name'],song['id'].toString());
+        print("myid:$myid");
+        print(value['name']);
+        print(song['id']);
+        Navigator.pop(context, value);
 
+      },
+      child: Text(value['name']),
+    )).toList();
+    SimpleDialog dialog = SimpleDialog(
+      title: Text("选择想要添加到的歌单"),
+      children: itemlist,
+    );
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
+  insertPlayList(String userid,String playlistname,String musicid) async{
+var url = Api.url + '/api/music/';
+try {
+      if(playlistname=="默认歌单") playlistname = userid+"default";
+      Map<String, dynamic> map = Map();
+      map['userid'] = userid;
+      map['playlistname'] = playlistname;
+      map['musicid'] = musicid;
+      var dio = Dio();
+      var response = await dio.post(url, data: map);
+      print('Response: $response');
+      Fluttertoast.showToast(msg: '添加成功!');
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+  
   createFootstep(String userid, String listentime, String musicid, String mood,
       String musicname, String artistname) async {
     var url = Api.url + '/api/history/';
     try {
-      // var data = {
-      //   'userid':userid,
-      //   'listentime':jsonEncode(listentime,toEncodable: myEncode),
-      //   'musicid':musicid,
-      //   'perception':mood,
-      //   'musicname':musicname,
-      //   'musicsinger':artistname,
-      //   'musicalbum':'七里香'
-      // };
       Map<String, dynamic> map = Map();
       map['userid'] = userid;
       map['listentime'] = listentime;
@@ -483,12 +579,5 @@ class _PlayerPageState extends State<PlayerPage>
       print(e);
       return null;
     }
-  }
-
-  dynamic myEncode(dynamic item) {
-    if (item is DateTime) {
-      return item.toIso8601String();
-    }
-    return item;
   }
 }
