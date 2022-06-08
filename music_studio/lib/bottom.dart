@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_studio/utils/shared_preference_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mainPages/minePage/mineAll.dart';
@@ -12,7 +13,6 @@ import 'mainPages/homePage/homeAll.dart';
 
 class _BottomState extends State<Bottom> {
   int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -26,13 +26,14 @@ class _BottomState extends State<Bottom> {
     _bottomNavPages..add(homePage())..add(communityPage())..add(minePage());
   }
 
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: _bottomNavPages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
-          
+
           BottomNavigationBarItem(icon: Icon(Icons.camera), label: "社区"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
         ],

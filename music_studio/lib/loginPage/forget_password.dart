@@ -79,7 +79,7 @@ class MyText extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center, //居中
               children: [
                 Text(
-                  "欢迎使用Flutter",
+                  "重设你的信息",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25.0,

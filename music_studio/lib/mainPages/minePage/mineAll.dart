@@ -48,7 +48,9 @@ class _minePageState extends State<minePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         appBar: AppBar(
+          
           //AppBar下端黑线
           bottom: PreferredSize(
               child: Container(

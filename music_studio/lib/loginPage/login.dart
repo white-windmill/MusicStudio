@@ -43,8 +43,10 @@ class MyScaff extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        
         //设置向导栏，包括登录和返回字样
         elevation: 0, //将向导栏的阴影设为0，确保全透明
         backgroundColor: Colors.transparent, //将向导栏设为透明颜色
@@ -53,14 +55,14 @@ class MyScaff extends StatelessWidget {
           style: TextStyle(fontSize: 20.0),
         ),
         centerTitle: true,
-        leadingWidth: 75.0,
-        leading: Padding(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Text(
-            "<返回",
-            textAlign: TextAlign.center,
-          ),
-        ),
+        // leadingWidth: 75.0,
+        // leading: Padding(
+        //   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+        //   child: Text(
+        //     "<返回",
+        //     textAlign: TextAlign.center,
+        //   ),
+        // ),
       ),
       body: SingleChildScrollView(
         child: MyText(),
@@ -262,7 +264,6 @@ try{
       Map<String,dynamic> data = response.data;
       print(data['ret']);
       if (data['ret'] == 0) {
-       
     Fluttertoast.showToast(msg: '登录成功!');
      setUserName(username);
      String myid="111";
@@ -275,8 +276,6 @@ try{
     Navigator.pushNamed(context, '/bottom');
     // Navigator.pushNamed(context, '/bottom',
     //     arguments: {'username': username, 'password': password});
-
-
       }
       else{
         Fluttertoast.showToast(msg: '用户名或密码错误!');

@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:music_studio/bottom.dart';
 import 'package:music_studio/common/api.dart';
 import 'package:music_studio/loginPage/login.dart';
+import 'package:music_studio/mainPages/homePage/editorialSelectionDetail.dart';
 import 'package:music_studio/widgets/RenameDialogContent.dart';
 
 import 'mineAll.dart';
@@ -104,12 +105,16 @@ class _MySongSheetState extends State<MySongSheet> {
                 // color: Colors.orange,
                 child: GestureDetector(
               onTap: () {
-                print("访问这个歌单");
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => songListDetail(
+                            playlistname: value['name'],
+                            playlistimage: value['imageurl'],
+                          )));
               },
               onLongPress:(){
                 showMyAlertDialog(context,value['name']);
-
-
               } ,
               child: Row(
                 children: [

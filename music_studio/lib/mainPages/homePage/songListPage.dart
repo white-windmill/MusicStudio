@@ -95,8 +95,8 @@ class _songListPageState extends State<songListPage> {
                   ),
                   height: 200,
                   width: double.infinity,
-                  child: Image.asset(
-                    "lib/assets/rotationChart/rotation1.jpg",
+                  child: Image.network(
+                    "http://124.220.169.238:8000/media/img/0ee51f988635d262fe1d097f9671d3ff.jpeg",
                     fit: BoxFit.cover,
                   )),
               Container(

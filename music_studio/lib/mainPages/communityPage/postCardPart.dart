@@ -49,7 +49,7 @@ class _postCardPageState extends State<postCardPage> {
     print(articleid);
     var response = await http.put(url,
         headers: {"content-type": "application/json"},
-        body: '{"articleid": "${articleid}"' + '}');
+        body: '{"articleid": "$articleid"' + '}');
   }
 
   delUpdatePostLikeCommShare(String articleid) async {
@@ -57,7 +57,7 @@ class _postCardPageState extends State<postCardPage> {
     print(articleid);
     var response = await http.put(url,
         headers: {"content-type": "application/json"},
-        body: '{"articleid": "${articleid}"' + '}');
+        body: '{"articleid": "$articleid"' + '}');
   }
 
   @override
@@ -290,7 +290,7 @@ class _postCardPageState extends State<postCardPage> {
                                       IconButton(
                                           onPressed: () {},
                                           icon: Icon(Icons.launch)),
-                                      Text('6',
+                                      Text('0',
                                           style: TextStyle(
                                               color: Color(0xFF111111),
                                               decorationStyle:
@@ -307,7 +307,6 @@ class _postCardPageState extends State<postCardPage> {
                                   ])
                                 ])))))));
   }
-
   showFollowDialog(BuildContext context) {
     //设置按钮
     Widget cancelButton = FlatButton(

@@ -10,7 +10,8 @@ class searchMessage extends StatelessWidget {
   Widget buildTextField(BuildContext context) {
     return Theme(
         data: ThemeData(primaryColor: Colors.grey),
-        child: new TextField(
+        child: Container(
+          child:TextField(
             controller: searchController,
             cursorColor: Color.fromARGB(255, 176, 210, 176),
             decoration: InputDecoration(
@@ -46,7 +47,8 @@ class searchMessage extends StatelessWidget {
                 hintStyle: new TextStyle(
                     fontSize: 13,
                     color: Color.fromARGB(50, 0, 0, 0),
-                    fontWeight: FontWeight.w700))));
+                    fontWeight: FontWeight.w700)))
+        ));
   }
 
   @override

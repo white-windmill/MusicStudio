@@ -47,8 +47,9 @@ class _songListState extends State<songList> {
             margin: EdgeInsets.fromLTRB(0.0, 5, 10.0, 0),
             constraints: BoxConstraints(
               maxHeight: 150,
+              maxWidth: 150,
             ),
-            child: Image.asset("lib/assets/rotationChart/rotation1.jpg",
+            child: Image.network('http://124.220.169.238:8000/media/img/0ee51f988635d262fe1d097f9671d3ff.jpeg',
                 fit: BoxFit.cover),
           ),
           SizedBox(

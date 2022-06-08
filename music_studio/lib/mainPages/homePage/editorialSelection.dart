@@ -38,10 +38,6 @@ class _editorialSelectionState extends State<editorialSelection> {
             formlist = data["data"];
              listLength = formlist.length;
         });
-    
-  
-    // print(formlist);
-   
   }
 
   Widget build(BuildContext context) {
@@ -79,7 +75,19 @@ class _editorialSelectionState extends State<editorialSelection> {
                 playlistname: formlist[1]['playlistname'],
                 playlistimage: 'http://124.220.169.238:8000/media/' +
                     formlist[1]['playlistimage'],
-                id: formlist[0]['id'].toString(),
+                id: formlist[1]['id'].toString(),
+              ),
+              recommendItem(
+                playlistname: formlist[2]['playlistname'],
+                playlistimage: 'http://124.220.169.238:8000/media/' +
+                    formlist[2]['playlistimage'],
+                id: formlist[2]['id'].toString(),
+              ),
+              recommendItem(
+                playlistname: formlist[3]['playlistname'],
+                playlistimage: 'http://124.220.169.238:8000/media/' +
+                    formlist[3]['playlistimage'],
+                id: formlist[3]['id'].toString(),
               ),
             
             ],
@@ -133,51 +141,6 @@ class recommendItem extends StatelessWidget {
             height: 65,
             child:Text(playlistname) ,)
           
-        ]),
-      ),
-    );
-  }
-}
-
-class picTextBtn extends StatelessWidget {
-   const picTextBtn(
-      {Key key,
-      this.playlistname,
-      this.playlistimage})
-      : super(key: key);
-  final String playlistname;
-  final String playlistimage;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-          return RankSongList(6606027462, playlistname);
-        }));
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => RankSongList(
-        //               playlistname: playlistname,
-        //               playlistimage: playlistimage,
-        //             )));
-      },
-      child: Container(
-        child: Column(children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(0.0, 5, 10.0, 0),
-            constraints: BoxConstraints(maxHeight: 150, maxWidth: 150),
-            child: Image.network(playlistimage,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity),
-          ),
-          SizedBox(
-            width: 10,
-            height: 10,
-          ),
-          Text(playlistname)
         ]),
       ),
     );

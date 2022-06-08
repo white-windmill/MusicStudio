@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:music_studio/bottom.dart';
 import 'package:music_studio/common/api.dart';
@@ -141,10 +142,10 @@ class _ModifyInformationState extends State<ModifyInformation> {
   
   _modify_Info(String userid,String username,String introduce,String userhead) async {
   var url = Api.url + "/api/user/";
-
+    print("firstpath:$userhead");
     String path = userhead.substring(7);
     String path1 = path.substring(0, path.length - 1);
-    print(path1);
+    print("nextpath:$path1");
 try {
     FormData formData = FormData.fromMap({
         'userimage':await MultipartFile.fromFile(path1, filename: "23.jpg"),
@@ -161,9 +162,8 @@ try {
     Map<String, dynamic> data = response.data;
     if (data['ret'] == 0) {
       print("修改成功！");
-      // Navigator.pushNamed(context, '/mine');
       Navigator.pushNamed(context, '/bottom');
-      // Navigator.of(context).pop();
+      Fluttertoast.showToast(msg: "修改成功！");
     } else {
       print("修改失败！");
     }
