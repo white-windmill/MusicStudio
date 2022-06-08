@@ -70,31 +70,49 @@ class _FootstepState extends State<Footstep> {
   }
 
   Widget _createListView(BuildContext context, AsyncSnapshot snapshot) {
-    return ListView(
-      children: history.map((value) {
-        return Container(
-          margin: EdgeInsets.all(10),
-          decoration: new BoxDecoration(
-            color: Colors.white,
-            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            //设置四周边框
-            border: new Border.all(width: 1, color: Colors.red),
-          ),
-          height: 100,
-          child: GestureDetector(
-            onDoubleTap: () => showSnackBar(value['perception']),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(value['listentime']),
-                Text(value['musicname']),
-              ],
+    if (history.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "暂时没有音乐足迹!",
+                style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,),
+              ),
+            ],
+          )
+        ],
+      );
+    } else {
+      return ListView(
+        children: history.map((value) {
+          return Container(
+            margin: EdgeInsets.all(10),
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              //设置四周边框
+              border: new Border.all(width: 1, color: Colors.grey),
             ),
-          ),
-        );
-      }).toList(),
-    );
+            height: 100,
+            child: GestureDetector(
+              onDoubleTap: () => showSnackBar(value['perception']),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(value['listentime']),
+                  Text(value['musicname']),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }
   }
 
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
