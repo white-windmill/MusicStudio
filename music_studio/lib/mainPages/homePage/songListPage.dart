@@ -191,15 +191,15 @@ class _rankListItemState extends State<rankListItem> {
               ),
             ],
           )),
-          IconButton(
-              color: widget.followMode == 1 ? Colors.red[700] : Colors.black,
-              icon: widget.followMode == 1
-                  ? Icon(MyIcons.followFont, size: 28)
-                  : Icon(MyIcons.followFont),
-              onPressed: () {
-                showFollowDialog(context);
-                print("click");
-              })
+          // IconButton(
+          //     color: widget.followMode == 1 ? Colors.red[700] : Colors.black,
+          //     icon: widget.followMode == 1
+          //         ? Icon(MyIcons.followFont, size: 28)
+          //         : Icon(MyIcons.followFont),
+          //     onPressed: () {
+          //       showFollowDialog(context);
+          //       print("click");
+          //     })
         ],
       ),
     );

@@ -65,7 +65,6 @@ class _PlayerPageState extends State<PlayerPage>
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      
       _animController = AnimationController(
           duration: const Duration(seconds: 24), vsync: this);
       _animController.addStatusListener((status) {
@@ -199,9 +198,9 @@ class _PlayerPageState extends State<PlayerPage>
         style: TextStyle(fontSize: 14.0, color: Colors.white60),
       ),
       trailing: GestureDetector(
-        onDoubleTap: () => showMySimpleDialog(context),
-        onTap:(){
-          showDialog(
+          onTap: () => showMySimpleDialog(context),
+          onDoubleTap: () {
+            showDialog(
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
@@ -223,9 +222,11 @@ class _PlayerPageState extends State<PlayerPage>
                     ),
                   );
                 });
-        } ,
-
-        child: Icon(Icons.add,color: Colors.white,)),
+          },
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          )),
       // trailing: Row(children: <Widget>[
       //   IconButton(
       //     icon: Icon(Icons.add, color: Colors.white),
@@ -256,7 +257,7 @@ class _PlayerPageState extends State<PlayerPage>
       //     IconButton(
       //     icon: Icon(Icons.add, color: Colors.white),
       //     onPressed: () {
-            
+
       //     }),
       // ],
       // ),
@@ -477,6 +478,7 @@ class _PlayerPageState extends State<PlayerPage>
     _buildAnim();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Builder(builder: (BuildContext context) {
         return Stack(children: <Widget>[
           // 背景图片
@@ -497,7 +499,8 @@ class _PlayerPageState extends State<PlayerPage>
               ),
             ),
           ),
-          SafeArea(
+
+            SafeArea(
               child: Column(
             children: <Widget>[
               _buildTitle(),
@@ -507,6 +510,7 @@ class _PlayerPageState extends State<PlayerPage>
               _buildControllerBar(),
             ],
           )),
+
           /* playerState == PlayerState.loading
               ? Align(
                   alignment: Alignment.bottomCenter,
@@ -517,34 +521,35 @@ class _PlayerPageState extends State<PlayerPage>
       }),
     );
   }
-  void showMySimpleDialog(BuildContext context) {
-    var itemlist = listData.map((value) => SimpleDialogOption(
-      onPressed: () {
-        insertPlayList(myid, value['name'],song['id'].toString());
-        print("myid:$myid");
-        print(value['name']);
-        print(song['id']);
-        Navigator.pop(context, value);
 
-      },
-      child: Text(value['name']),
-    )).toList();
+  void showMySimpleDialog(BuildContext context) {
+    var itemlist = listData
+        .map((value) => SimpleDialogOption(
+              onPressed: () {
+                insertPlayList(myid, value['name'], song['id'].toString());
+                print("myid:$myid");
+                print(value['name']);
+                print(song['id']);
+                Navigator.pop(context, value);
+              },
+              child: Text(value['name']),
+            ))
+        .toList();
     SimpleDialog dialog = SimpleDialog(
       title: Text("选择想要添加到的歌单"),
       children: itemlist,
     );
-        showDialog(
+    showDialog(
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
-  insertPlayList(String userid,String playlistname,String musicid) async{
-var url = Api.url + '/api/music/';
-try {
-      if(playlistname=="默认歌单") playlistname = userid+"default";
+
+  insertPlayList(String userid, String playlistname, String musicid) async {
+    var url = Api.url + '/api/music/';
+    try {
+      if (playlistname == "默认歌单") playlistname = userid + "default";
       Map<String, dynamic> map = Map();
       map['userid'] = userid;
       map['playlistname'] = playlistname;
@@ -558,7 +563,7 @@ try {
       return null;
     }
   }
-  
+
   createFootstep(String userid, String listentime, String musicid, String mood,
       String musicname, String artistname) async {
     var url = Api.url + '/api/history/';

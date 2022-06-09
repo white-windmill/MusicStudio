@@ -67,7 +67,7 @@ class _UserArticlePageState extends State<UserArticlePage> {
   }
 
   Widget build(BuildContext context) {
-    return DefaultTabController(
+      return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -75,7 +75,7 @@ class _UserArticlePageState extends State<UserArticlePage> {
           centerTitle: true,
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
           title: Text(
-            widget.userName + '的社区',
+            widget.userName + '的帖子',
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -96,5 +96,6 @@ class _UserArticlePageState extends State<UserArticlePage> {
         ),
       ),
     );
+    }
   }
-}
+

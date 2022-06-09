@@ -373,7 +373,7 @@ getData(String userid) async {
     print(data['data'][0]['username']);
     // print(data['data'][0]['usercreatedata'].length);
     if (data['ret'] == 0) {
-      if (data['data'][0]['userimage'] != null) {
+      if (data['data'][0]['userimage'] != "null") {
         userhead = urlImage + data['data'][0]['userimage'];
       }
       print(userhead);

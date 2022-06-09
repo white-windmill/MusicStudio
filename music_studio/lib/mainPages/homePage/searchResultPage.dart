@@ -67,7 +67,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           });
         
       }
-    Fluttertoast.showToast(msg: '歌单搜索成功!');
+    // Fluttertoast.showToast(msg: '歌单搜索成功!');
      
       }
 
